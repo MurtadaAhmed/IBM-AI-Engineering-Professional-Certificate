@@ -1,0 +1,122 @@
+# Regression Trees in Machine Learning
+
+This guide provides an overview of regression trees, a machine learning algorithm used to predict continuous values. It explains how regression trees differ from classification trees, how they are created, and the criteria used for splitting data, based on the provided transcript.
+
+## What is a Regression Tree?
+
+- **Definition**: A regression tree is a machine learning algorithm analogous to a decision tree, designed to predict continuous values rather than discrete classes.
+- **Key Difference from Classification**:
+  - **Classification Trees**: Predict categorical target variables (e.g., true/false, spam/not spam).
+  - **Regression Trees**: Predict continuous target variables (e.g., temperature, salary).
+- **Structure**: Like decision trees, regression trees consist of:
+  - **Internal Nodes**: Tests on features (e.g., "Is age > 40?").
+  - **Branches**: Outcomes of the test (e.g., "Yes" or "No").
+  - **Leaf Nodes**: Predicted continuous values (e.g., average target value in the node).
+
+## Classification Trees vs. Regression Trees
+
+| **Aspect**                     | **Classification Trees**                              | **Regression Trees**                                  |
+|--------------------------------|------------------------------------------------------|------------------------------------------------------|
+| **Target Variable**            | Categorical (e.g., true/false)                       | Continuous (e.g., temperature, revenue)              |
+| **Prediction at Leaf Nodes**   | Class label (majority vote of classes in the node)  | Average (or median) of target values in the node    |
+| **Use Cases**                  | Spam detection, image classification, medical diagnosis | Predicting revenue, temperatures, wildfire risk     |
+| **Splitting Criterion**        | Entropy, information gain, Gini impurity            | Mean Squared Error (MSE)                            |
+
+## Applications of Regression Trees
+
+Regression trees are used in scenarios requiring continuous value predictions, such as:
+- **Revenue Prediction**: Estimating future sales or profits.
+- **Temperature Forecasting**: Predicting weather conditions.
+- **Wildfire Risk Assessment**: Estimating the likelihood or severity of wildfires based on environmental factors.
+
+## Creating a Regression Tree
+
+- **Process**: Regression trees are created by recursively splitting the dataset into subsets to maximize information gain and minimize the variance of predicted values.
+- **Steps**:
+  1. **Start with a Root Node**: Begin with all training data.
+  2. **Split Data**: Divide the data into subsets based on a feature and threshold (for continuous features) or class (for binary/multi-class features).
+  3. **Assign Predictions**: At each leaf node, predict the average (or median) of the target values in the node.
+  4. **Evaluate Split Quality**: Use Mean Squared Error (MSE) to measure the quality of the split.
+  5. **Repeat**: Continue splitting until a stopping criterion is met (e.g., maximum depth, minimum samples per node).
+- **Objective**: Minimize the randomness (variance) of the target values in each node to improve prediction accuracy.
+
+## Splitting Criteria: Mean Squared Error (MSE)
+
+- **Definition**: MSE measures the variance of target values within a node, indicating how spread out the values are.
+- **Formula**: MSE = (1/n) ∑ (y_i - y-hat)^2, where:
+  - y_i = Actual target value for data point i.
+  - y-hat = Predicted value (average of target values in the node).
+  - n = Number of data points in the node.
+- **Split Quality**:
+  - For each potential split, calculate the MSE for the left and right subsets.
+  - Compute the **Weighted Average MSE**:
+    - Weighted MSE = (n_left / n_total) * MSE_left + (n_right / n_total) * MSE_right
+    - n_left, n_right = Number of data points in the left and right subsets.
+    - n_total = Total number of data points in the node.
+  - Choose the split (feature and threshold) with the lowest weighted MSE, as it minimizes variance and improves prediction accuracy.
+- **Interpretation**: Lower MSE indicates that the values in the node are closer to the predicted value, signifying a higher-quality split.
+
+## Handling Different Feature Types
+
+### Continuous Features
+
+- **Splitting**:
+  - Split data based on a threshold (α) into two subsets: values ≤ α (left node) and values > α (right node).
+  - The predicted value (y-hat) for each node is the average of the target values in that node.
+- **Choosing Thresholds**:
+  - **Exhaustive Search Method**:
+    1. Sort the feature values in ascending order (x_i < x_j for i < j).
+    2. Remove duplicates to ensure x_i < x_j.
+    3. Calculate candidate thresholds as midpoints: α_i = (x_i + x_i+1) / 2.
+    4. Evaluate each threshold by calculating the weighted MSE for the resulting split.
+    5. Select the threshold with the lowest weighted MSE.
+  - **Challenges**:
+    - Exhaustive search is computationally expensive for large datasets.
+    - Assumes uniformly distributed target values, which may not always hold.
+  - **Optimization for Large Datasets**:
+    - Sample a sparse subset of thresholds to improve efficiency, at the cost of some accuracy.
+    - Consider the distribution of target values when sampling thresholds.
+
+### Binary Features
+
+- **Splitting**:
+  - Split data directly into two classes (e.g., male/female).
+  - Calculate the weighted MSE for the two resulting nodes.
+- **Optimization**: Since there is only one possible split, the weighted MSE is already optimized.
+
+### Multi-Class Features
+
+- **Splitting**:
+  - Use strategies like one-versus-one or one-versus-all to generate binary splits.
+  - For each binary split, calculate the weighted average MSE.
+  - Select the split with the lowest weighted MSE to minimize prediction variance.
+
+## Predictions at Leaf Nodes
+
+- **Default Prediction**: The predicted value (y-hat) at a leaf node is the average of the target values for all data points in that node.
+- **Alternative**: Use the median value instead of the mean, especially for skewed data.
+  - **Advantage**: Median is more robust to outliers.
+  - **Disadvantage**: Median is more computationally expensive than the mean.
+- **Normally Distributed Data**: Mean and median are comparable, so the mean is typically used for efficiency.
+
+## Key Takeaways
+
+- **Regression Tree Overview**:
+  - A decision tree adapted to predict continuous values, unlike classification trees, which predict categorical classes.
+- **Classification vs. Regression**:
+  - Classification: Categorical target, class-based predictions (majority vote).
+  - Regression: Continuous target, average-based predictions.
+- **Creation Process**:
+  - Recursively split data to minimize variance using MSE as the splitting criterion.
+  - Select features and thresholds (for continuous features) or classes (for binary/multi-class features) that yield the lowest weighted MSE.
+- **Splitting Criterion**:
+  - MSE measures variance within nodes; weighted MSE evaluates split quality.
+  - Lower MSE indicates better splits with less variance in predictions.
+- **Feature Handling**:
+  - Continuous features: Split using thresholds chosen via exhaustive search or sampling.
+  - Binary features: Split directly into classes.
+  - Multi-class features: Use binary split strategies (e.g., one-versus-one).
+- **Applications**:
+  - Predicting continuous outcomes like revenue, temperature, or wildfire risk.
+
+Regression trees are powerful tools for predicting continuous values, leveraging recursive splitting and MSE-based criteria to build accurate and interpretable models.
