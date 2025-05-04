@@ -1,0 +1,23 @@
+- Regression Tree (from Machine learning with Python course from IBM):
+* Machine learning tool used for detecting continues values (numbers)
+* Structure:
+-- Internal nodes: question about the feature
+-- Branches: possible answer to the question
+-- Leaf nodes: Final predicted number
+* Use cases:
+-- Predicting sales
+-- Weather forecasts
+-- Risk Scores
+* Quality of the prediction is measured using MSE (Mean Squared Error)
+-- A lower MSE means better result
+* Prediction are made by:
+-- Taking the average (mean) of all target numbers in the leaf node, fast and works well.
+-- Use median if the dataset has many outliers, but takes more time to calculate.
+* Code guideline:
+-- import libraries >> Pandas, numpy, matplotlib, scikit-learn
+-- Data Analysis >> Read the dataset, check the correlation between the features and the target using .corr(), and plot them if you like using barh
+-- Data preprocessing >> split the features (X) and the target (y) and normalize the features using normalize from sklearn.preprocessing
+-- Train/Test split >> split the dataset into training and testing dataset using train_test_split from sklearn.model_selection
+-- Build the model >> use DecisionTreeRegressor from sklearn.tree (with criterion, max_depth and random_state), then fit it to the train dataset.
+-- Model evaluation >> using mean_squared_error sklearn.metrics and .score method on the model.
+-- Experimentation >> use less features that are more corelated to the target, changing max_depth to see how this affect the result

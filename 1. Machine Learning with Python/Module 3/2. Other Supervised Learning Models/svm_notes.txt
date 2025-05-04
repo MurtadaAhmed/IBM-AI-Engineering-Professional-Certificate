@@ -1,0 +1,81 @@
+Support Vector Machines (SVM):
+- Supervised machine learning tool primarily used for classification (binary classification) and sometimes for regression.
+- Imagine each piece of data as a point and draw a boundary called hyperplane to separate different groups
+- The hyperplane is the place where it has the largest margin (as far away as possible from the closest points of both groups)
+- in 2D >> hyperplane is a line
+- in 3D or higher dimensions >> hyperplane is a plane or more complex surface
+- Bigger margin (bigger empty space around the hyperplace) >> means the model is more confident on new data.
+- Support Vectors are the closed points to the hyperplance
+- Soft Margin is the place where some points are on the wrong side of the hyperplane
+- Parameter C:
+-- control the balance between a wide margin and few misclassifications.
+-- Small C >> more miscalculations >> wider margin (more flexible)
+-- Large C >> fewer miscalculations >> narrower margin (stricter)
+
+- Kernel trick:
+-- used when the data can't be separated by a straight line (like one class forms a circle insider another)
+-- SVM uses kernelling >> transform the data into a higher-dimensional space where straight hyperplane can separate the classes
+-- Functions:
+--- Linear Kernel >> Default >> for data already separable by a straight line.
+--- Polynomial Kernel >> Transform data into a curved shape.
+--- Radial Basis Function (RBF) >> groups points on how close they are
+--- Sigmoid Kernel
+
+- SVM for Regression (SVR):
+-- Predict numbers using Support Vector Regression (SVR)
+-- Fit a curve to predict numbers, keeping predictions within a tube around the true values.
+-- Eplison:
+--- parameter determines the width of the tube.
+--- Points inside the tube are considered accurate, points outside are considered noise.
+
+- Applications of SVM:
+-- Image Analysis:
+--- Image classification
+--- Handwritten image detection
+-- Text Processing:
+--- Spam detection
+--- Sentiment analysis
+-- Speech recognition
+-- Anomaly detection
+-- Noise filtering
+
+- Advantage of SVM:
+-- works well with high dimensional spaces (images)
+-- Robust to overfitting >> good for new data
+-- Excellent for linearly separable data
+-- Handles weakly separable data with soft margin option
+
+- Limitations of SVM:
+-- slow on large datasets
+-- sensitive to noise
+-- sensitive to settings >> choosing the right kernel and parameters (C/Epsilon) is tricky and requires testing.
+-- needs careful tuning
+
+- How SVM makes predictions
+-- Classification:
+--- trained model fined the hyperplane defined by a weight vector (w) and bias term (b)
+--- new data (x) is entered into the equation >> w * x + b
+---- > 0 >> above the line >> one class
+---- < 0 >> below the line >> the other class
+-- Regression:
+--- predict the number based on the curve fitted to the data (epsilon tube defining acceptable errors)
+
+- Coding part:
+-- import libraries >> pandas, scikit-learn, matplotlib
+-- load the data using pandas read_csv()
+-- Analyse the data:
+--- find the labels using .unique() on the target
+--- find the values of each label using .value_counts().values on the target
+--- use .corr() to find how each feature is correlated to the target (optional)
+-- Processing the dataset:
+--- Apply StandardScaler() to the the features
+--- get the .values of the resulting normalized dataset
+--- get the X and Y from the above
+--- apply normalize() with norm=l1 to the X
+-- Spilt the data using train_test_split
+-- Build the support vector machine model:
+--- initialize LinearSVC() with class_wright="balanced", loss="hinge", fit_intercept=False
+--- fit X_train and y_train to the initialized model
+-- Evaluate the model:
+--- use the model's decision_function() on X_test
+--- use roc_auc_score() on the y_test and y_pred
