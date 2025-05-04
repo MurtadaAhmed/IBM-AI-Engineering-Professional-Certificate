@@ -1,0 +1,50 @@
+Decision Tree (from Machine learning with Python course from IBM):
+
+Theory:
+- A machine learning algorithm used for classification.
+- Easily visualized as flowchart
+- Transparent, showing exactly how the predictions are made
+
+Structure:
+- Internal Node >> Condition
+- Branches >> Outcome of the condition
+- Leaf Node >> Assign the label to the data
+
+Practical use case:
+- Medical Study for drug prescription (patients with the same illness responds differently to different medications)
+The model will decide on which criteria certain drug is selected based on the dataset (age, sex, BP, Cholesterol, etc)
+
+
+Pruning a Decision Tree:
+- Used to avoid overfitting or when there are many classes/features
+- Simplify the model, improve accuracy, enhance generalization to unseen data
+
+
+Splitting Criteria:
+1. Entropy:
+- measure the randomness in a node classes.
+- 0 >> means all data belong to one class in that node
+- 1 >> means the data equally divided between the classes in that node
+
+* the lower the entropy, the more pure the node
+
+2. Information Gain:
+- measures the reduction in entropy after the split
+
+* the higher the information gain, the more pure the node
+
+3. Gini impurity:
+- measures the impurity of a node
+- simpler than entropy
+
+* the lower the gini impurity, the more pure the node
+
+Code guideline:
+1. Import libraries: numpy, pandas, scikit-learn, matplotlib
+2. Read the dataset
+3. Preprocess categorical features using LabelEncoder.
+4. Find the null values using isnull()
+5. Split the data into X, y.
+6. Fit DecisionTreeClassifier on the data.
+7. Get prediction accuracy using accuracy_score()
+8. Plot the result using plot_tree()
