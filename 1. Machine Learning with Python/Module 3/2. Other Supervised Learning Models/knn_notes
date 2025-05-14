@@ -1,0 +1,44 @@
+K-Nearest Neighbors (KNN) bullet points - From IBM course: Machine Learning with Python
+
+Definition: A supervised ML algorithm used for classification and regression.
+- Assumes the data points close to each to each other (or neighbors) are similar and belong to the same group or having similar values.
+
+- Prediction:
+-- Regression >> calculates the average of the neighbors to decide the predicted label.
+-- Classification >> uses the majority vote to predict the correct category.
+
+- K: is the number of neighbors KNN uses when making prediction.
+-- small K >> looks at very few neighbors >> can lead to overfitting.
+-- big K >> looks at many neighbors >> can lead to underfitting.
+-- balanced K >> gives better accuracy
+
+- How to choose the best K value?
+-- Test with different K values on the test dataset, measure the accuracy for each K, and pick the K with the highest accuracy.
+
+- Why is KNN is called a "Lazy learner"?
+-- It doesnt build a model during training like other algorithms.
+-- It just store the training data and waits until we need them to make prediction.
+-- While making prediction, it calculates the distance of the new data point to the training points, and then picks the K closest ones.
+
+- Challenges of using KNN model:
+1. Skewed class distribution (unbalanced - when one class is more common than the other)
+-- solution: weighted voting >> give more wight to closer neighbors.
+2. Large feature values (some features have big numbers compared to others)
+-- solution >> Standardization.
+3. Irrelevant features >> add noise
+-- solution >> select only the relevant features. Test the features by running KNN with/without them and compare accuracy.
+-- Benefit of using only relevant features: faster prediction, reduce computational cost, and improve model performance.
+
+
+- Coding guidelines:
+1. Install libraries: numpy, matplotlib, scikit-learn, pandas, seaborn.
+2. Load the dataset
+3. Create the X and y from the dataset
+4. Normalize X
+5. Split the dataset into train and test
+6. Initialize the model KNeighborsClassifier with specific K value, and fit it to the training dataset.
+7. Make prediction on the test dataset and calculate the accuracy_score
+8. To determine the best K value, use for loop to iterate into a range of K values, save the accuracy score for each K, and pick the K with the best accuracy value.
+
+
+#MachineLearning #DataScience #ArtificialIntelligence #DecisionTree #ML #Python #LearningJourney #CareerGrowth #TechLearning #IBM
