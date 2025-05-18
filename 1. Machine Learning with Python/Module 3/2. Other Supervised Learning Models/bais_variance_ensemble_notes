@@ -1,0 +1,42 @@
+🌟 Bias, Variance, and Ensemble Models Key Notes - From IBM Course: Machine Learning with Python 🌟
+
+📌 Bias: How far off a model's prediction from true value.
+Low bias >> accurate model
+High bias >> inaccurate model
+Zero bias >> perfect model
+
+📊 Variance: How model predictions change when trained on different subsets of data.
+Low variance >> precise result
+High variance >> imprecise result, model too sensitive to training data, overfitting
+
+🔄 As model become more complex (more features or layers) >> bias decrease (accurate prediction) but variance increase (predictions become less stable)
+
+⚖️ The Bias-Variance Tradeoff:
+Low complexity model [weak learner]:
+    - High bias, low variance >> underfitting
+High complexity model [strong learner]:
+    - Low bias, high variance >> overfitting
+
+🤝 Ensemble Methods: Bagging and Boosting
+Ensemble methods >>> combining multiple models (base learners) to balance bias and variance to improve performance.
+🛍️ Bagging:
+    Train multiple models on different random subsets of data, and averages their predictions.
+    Reduce the variance and the rist of overfitting.
+    Example: Random Forests.
+🚀 Boosting:
+    Build a series of weak learners where each one learns from the mistake of the other
+    Starts with weak learner, increase the weight of misclassified data points, decrease the weight of correctly classified one, train the next weak learner on the reweighted data. Then combine all the weak learners into a final model using weighted sum.
+    Reduce the bias and the risk of underfitting.
+    Example: Gradient Boosting, XGBoost, AdaBoost
+
+💻 Coding guideline:
+1. Import libraries numpy, scikit-learn, matplotlib, xgboost
+2. Read the data set, get the X, y, and split the data into training and test dataset using train_test_split.
+2. Initialize the models RandomForestRegressor and XGBRegressor with parameters n_estimators & random_state
+3. Fit both of the models on the training data set, optionally measure how long each model takes to finish training.
+4. Check the prediction on the test data set on both of the models, optionally measure how long each model takes to finish predicting.
+5. Measure the mean_squared_error and r2_score
+6. Measure the standard deviation on the test target [to compare with prediction errors]
+7. Create two subplots for each model. Scatter the target and the prediction, plot the accurate result [perfect prediction line] with their standard deviation [of errors or predictions]
+
+#MachineLearning #DataScience #ArtificialIntelligence #EnsembleModels #ML #Python #LearningJourney #CareerGrowth #TechLearning #IBM
