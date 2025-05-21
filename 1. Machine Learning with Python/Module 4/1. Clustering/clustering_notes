@@ -1,0 +1,39 @@
+Clustering - From IBM course: Machine Learning with Python:
+- ML method that groups data points into clusters based on how similar they are to each other.
+- It works with unlabeled data (unsupervised learning)
+
+- Applications:
+Example use case >> Customer segmentation - Music genre identification - Pattern recognition (medical images) - Data summarization - Image compression
+
+- Three main types:
+1. Partition-Based Clustering (K-Means)
+    - used for non-overlapping groups >> each data point belongs to exactly one cluster.
+    - Fast + efficient for large datasets
+    - Bad for irregular/overlapping groups
+
+2. Density-Based Clustering (DBSCAN)
+    - Group data points based on the high density >> creating clusters of any shape
+    - Great for irregular clusters, handle noisy data appropriately
+    - May struggle with groups with varying density level or very large datasets
+
+3. Hierarchical Clustering
+    - Organizes data into trees of nested clusters >> each cluster contain smaller sub-cluster >> dendrogram
+    - Intuitive, shows how clusters are related. Works well with small to medium-sized datasets.
+    - Can be slow for very large datasets
+    - Two types:
+        - Agglomerative (Bottom-up approach)
+            - start with each data point as its own cluster >> merges the closest pairs step by step >> form larger cluster
+        - Divisive (Top-down approach)
+            - start with all data points as one big cluster >> splits it into smaller clusters repeatedly until a stopping criterion is met
+
+- Coding guideline (K-Means):
+    1. install libraries: numpy - matplotlib - pandas - scikit-learn - plotly
+    2. read the dataset using read_csv() from pandas.
+    3. check the dataset, drop the na values using dropna() on the dataframe, drop irrelevant categorical features if needed.
+    4. apply standardization on the dataset using StandardScaler() from sklearn.preprocessing
+    5. initialize the model KMeans from sklearn.clusters, use the parameters init="k-means++", n-cluster with the number of clusters you want, and n_init
+    6. Fit the model on the dataset using .fit()
+    7. generate the labels from the model using .labels_
+    8. add the generated labels as feature to the dataset
+    9. 3d plot the data using express from plotly
+
