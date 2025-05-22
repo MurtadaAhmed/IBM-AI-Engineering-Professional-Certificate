@@ -1,0 +1,39 @@
+DBSCAN and HDBSCAN Clustering - from IBM Machine Learning Course
+
+1. Main points:
+    - Two machine learning algorithms that group data based on their density.
+    - Find clusters of any shape (unlike k-means which assumes convex clusters)
+    - Labels outliers as noice (unlike k-means which forces them into cluster)
+    - Works when we don't know how many clusters exits (unlike k-means which requires choosing k)
+
+2. DBSCAN:
+    - Form clusters based on user-defined density values:
+        - Epsilon >> the radius
+        - Minimum points >> minimum number of points needed to form a cluster
+    - Points types:
+        - Core Point: the heart of the cluster, has at least n points (including itself)
+        - Border Point: on the edge of the cluster
+        - Noise Point: an outlier
+
+    - Non-iterative >> makes one pass through the data, unlike k-means which repeats itself to adjust the clusters.
+
+3. HDBSCAN:
+    - Advanced version of DBSCAN.
+    - Doesn't require setting Epsilon (radius) >> more flexible for noise and outliers.
+    - Adjust neighborhood size based on the density. Needs the following parameters:
+        - Minimum samples.
+        - Minimum cluster size.
+    - Find more meaningful clusters in dense areas compared to DBSCAN (which treat areas of high density as one cluster)
+
+4. Coding guideline (for datasets with geographical points - Latitude, Longitude):
+    - Libraries: numpy, pandas, matplotlib, scikit-learn, hdbscan, geopandas, contextily, shapely
+    - DBSCAN:
+        - Initialize the DBSCAN model from sklearn.cluster with parameters >> eps, min_samples, metric, and fit it on the dataset.
+        - Get the clusters using .fit_predict on the dataset, and save it as feature in the dataset.
+        - Plot the results using geopandas, matplotlib.pyplot and contextily
+    - HDBSCAN:
+        - Initialize the model HDBSCAN from hdbscan with parameters >> min_samples, min_cluster_size, metric, and fit it to the dataset.
+        - Get the clusters using .fit_predict on the dataset, and save it as feature in the dataset.
+        - Plot the results using geopandas, matplotlib.pyplot and contextily
+
+
