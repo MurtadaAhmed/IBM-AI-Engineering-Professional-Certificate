@@ -1,0 +1,1940 @@
+Module 1
+Logistic Regression Cross Entropy Loss
+In this video, we'll talk about the cross-entropy loss. This will be our total loss or cost
+function for logistic regression, but we'll also apply it to other models for classification.
+In this video, we will talk about Problem with Mean Squared Error. First, we'll talk
+about Maximum Likelihood Estimation, and then we'll see how to go from Maximum Likelihood
+Estimation to calculating cross-entropy loss, then train the model PyTorch.
+Here we'll do it just for logistic regression, but the same methodology applies to all the
+models that involve classification. When training linear classifiers, we want to minimize the
+number of misclassified samples. This is because if our classifier classifies a high number
+of samples incorrectly during training, it would not work well on actual test data. Thus,
+we want to minimize the loss. The loss for our linear classifier is calculated using
+the loss function, which is also known as the cost function.
+The loss function looks something like this. It looks pretty similar to linear regression,
+except we have this little logistic term here. This equation looks pretty daunting, so let's
+do a simplified example, where we'll only focus on the bias term, which is also known
+as the B-term of the linear classifier. We'll also look at how the threshold function behaves,
+so that it's a little easier to understand. Now let's see how we can calculate the loss
+of the threshold function we have here. From the previous slide, the mathematical formula
+for calculating the loss function is as follows. Beyond the mathematical formula, let's try
+to have an intuitive understanding of what the loss function is actually calculating.
+Here we have three red samples and three blue samples. The red samples are the ones
+that have been misclassified. Going back to the mathematical representation of our loss
+function, the Yn term equals to 0 for the red samples and 1 for the blue samples.
+The value of the threshold function for all of these samples equals to 1. Plugging in
+the values of Yn and the threshold function for all these samples in the formula of the
+loss function, and summing all the values, we get that the loss of this threshold function
+for three misclassified samples is equal to 3. We can denote the number of misclassified
+samples versus the cost or loss in a table like this. Generalizing for this particular
+threshold function, if we had two misclassified samples, our cost would be 2, and had we had
+zero misclassified samples, our cost would be 0.
+Now let's see the plot of the cost of the threshold function. We have the gradient descent
+item from our bias parameter B. The value for the cost for a specific line is given
+by the green ball. If we move the line a little, we have two misclassified samples for the
+threshold function. But now, notice something interesting happens to the cost function.
+The value falls in a region where we have a flat line on the cost function. The gradient
+in this region is 0. We do not want this to happen. When something like this happens,
+the parameter will get stuck in the region, thereby resulting in none of the parameter
+values getting updated for the classifier. As a result, we will have two misclassified
+samples. Instead of using the threshold function, let's
+consider using the sigmoid function. We'll see the advantage of using this function for
+classification. Here's a plot of the cost of the sigmoid function. Notice how the curve
+is smooth compared to the curve of the threshold function. Using the sigmoid function for classification,
+we have three misclassified samples here. Note the corresponding value of the cost denoted
+by the green ball on the curve. Now if we move the line by a little, we see that we
+have two misclassified samples, and the corresponding value of the cost is in a smooth region, not
+in a flat region. Finally, if we move the line even more to the right so that we have
+no misclassified samples, the value of the loss is always smooth and only flat in the
+minimum, resulting in better parameter values and less misclassified samples.
+Let's look at the cost surface for two parameters W and B. It turns out, unlike the one-parameter
+case, the cost surface for logistic regression with the squared loss is flat. If you look
+closely at the surface, there are a lot of contour lines around this region, but not
+as many around this region, which implies a flat surface. If we start random initialization
+in a good location, our algorithm will converge to a minimum, but if we start our initialization
+in the bad region, nothing will happen. Let's see what happens if we use maximum likelihood
+estimation to estimate the parameter. We have a classification dataset here and will only
+focus on the bias parameter. The sample of Y in this dataset belong to either one of
+two classes, either red or blue. Class 0 is represented by red and class 1 is denoted
+by blue. We can calculate the likelihood for this dataset as follows. As the logistic function
+gave us the probability of Y being equal to 0 or 1, we can calculate the likelihood using
+this, which equals to 0.445. Now, let's consider another line, which seems
+to be better at classifying the training data with a different value for the bias parameter.
+As with the previous case, we can calculate the likelihood as follows, and the likelihood
+value equals 0.46 for this case. And for the final line, which seems to be the best one,
+the value of… The likelihood's value is 0.47. Our goal is to obtain the parameters
+that maximize the likelihood function. So just like flipping a coin, you can come
+up with an expression for the likelihood and here's an idealized plot of just one parameter.
+We want to find the maximum point. If we take the log, as you can see, it didn't affect
+the position of the maximum, just the shape of the function. And if we want to minimize
+something, we simply multiply it by a negative number. If you notice carefully, the location
+of the minimum is in the same place as the position of the maximum. And we can simply
+average it out. It turns out, the minimum of this function corresponds to the maximum
+value of the likelihood. The final expression is the cross-entropy
+loss, or cost. Here's the actual expression, where theta represents the weights and biases,
+and we can implement it in PyTorch as follows. Here's the corresponding contour plot of
+the equation we just implemented in PyTorch. There's contours all over the plot surface,
+and it will only be flat at the minimum. Now we'll cover how to perform logistic regression
+in PyTorch. To perform logistic regression, first we need
+to create a model. In PyTorch, we can create a logistic regression model using the sequential
+method. In this case, we have a one-dimensional input and a one-dimensional output. The linear
+model is then passed to the sigmoid function, finally producing a one-dimensional output.
+Another way to create a model for logistic regression is by defining our own custom model
+using the nn.module package. The initialization of this class will be based upon the input
+dimension and the output dimension, which in our case would be 1.
+Next, we define our forward pass function. The forward pass refers to calculating the
+predicted output value by our model based upon the input. We apply the sigmoid function
+to our intermediate linear output z in order to convert it to sigmoid probabilities.
+Next, we need to define our loss function. The loss function is used for updating the
+weight parameter of the model so that we end up with the best model for performing
+logistic regression. We can use mean squared error or MSE.
+PyTorch has an inbuilt method for doing this. We can use nn.mseloss method for calculating
+the loss as a mean squared error. PyTorch also has some other functions for calculating
+loss. We saw this formula for calculating the cross-entropy.
+Instead of writing this verbose formula all by ourselves, we can instead use PyTorch's
+inbuilt nn.bceLoss function for calculating the loss.
+We are very close to performing logistic regression. Just a few more steps and we'll be done.
+We start by loading our dataset. We then create the logistic regression model. Since both
+our input and output dimensions are equal to 1, we pass 1 and 1 to the constructor of
+our model class. We use the Stochastic Gradient Descent Optimizer, also abbreviated as SGD,
+for updating the model parameters. We specify the learning rate as 0.01 for the parameter
+updates. Finally, here's all the code you will need
+for performing logistic regression in PyTorch. Let's understand what this code does.
+We run this code for 100 epochs. For each iteration, we load the x and y from the dataset.
+We then pass the input i.e. x to our model and get a predicted value, i.e. y-hat from
+the model. Next, we calculate the loss based upon our
+selected criteria for selecting the best model. We then get the gradients for the parameters
+using the loss.backward function and finally update the parameter using the optimizer.step
+function. By the end of 100 epochs, we would have the best model based upon the above criteria
+for performing logistic regression. Just a final note, the output produced by
+our model will have a value between 0 and 1. We will perform some thresholding in the
+lab to get the actual class values. Thank you for watching this video.
+
+Errata: Logistic Regression Cross Entropy Loss
+Introduction to Cross-Entropy Loss:
+
+The video explained why cross-entropy loss is preferable over MSE in classification problems. MSE can lead to poor model performance when used in classification tasks, especially when misclassification is common. Cross-entropy loss offers a more suitable alternative by better capturing the error for classification problems.
+Maximum Likelihood Estimation (MLE) to Cross-Entropy Loss:
+
+This section introduced the concept of MLE, which is used to find the parameters that maximize the likelihood of observing the given data. The video demonstrated the derivation of cross-entropy loss from MLE and explained how it becomes the cost function for logistic regression.
+Challenges with Threshold Functions:
+
+The video addressed the limitations of using threshold functions in classification, particularly highlighting how they can create flat regions in the loss surface. In these flat regions, gradients are very small or zero, which can prevent the model from effectively updating its parameters during training, thus hindering optimization.
+Advantages of Using the Sigmoid Function:
+
+To overcome the issues with threshold functions, the video introduced the sigmoid function. The sigmoid function creates a smooth curve for the loss function, which ensures that gradient descent can effectively update the model parameters, even in regions that would otherwise be flat using a threshold function.
+Visualizing Loss Surfaces:
+
+The video used plots to visually show the difference between loss surfaces using sigmoid versus threshold functions. The sigmoid curve is smoother and avoids the flat regions present with the threshold function. This smoothness allows for more effective training and parameter updates, ultimately leading to better model performance.
+Implementing Logistic Regression with Cross-Entropy Loss in PyTorch:
+
+In the final section, the video covered the practical steps for implementing logistic regression in PyTorch. This included:
+
+    Creating a logistic regression model using PyTorch's nn.Module.
+    Defining the forward pass to compute predictions using the sigmoid function.
+    Choosing the appropriate loss function (specifically nn.BCELoss for binary classification).
+    Training the model with stochastic gradient descent (SGD), which updates the parameters based on computed gradients.
+
+Suggested Corrections and Enhancements:
+Use of Distinct Symbols for Multiplication:
+
+Throughout the video, the "x" character was used for multiplication. For clarity and consistency, we suggest replacing this "x" with either a dot (⋅) or the multiplication sign (×). This change will help distinguish multiplication from variable names and other elements in the formulas.
+Consistent Notation:
+
+In some places, the variable "x" was not consistently formatted. For clarity, "x" should be italicized consistently to avoid confusion with other symbols. Additionally, ensuring distinct symbols for operations (like multiplication) will make the mathematical expressions easier to follow.
+
+Module 2 - Softmax Regression
+Softmax
+In this video, we’ll talk about the Softmax function and understand its internal workings.
+First we’ll start discussing the Softmax function in 1D and then we’ll cover the 2D case.
+This will give you an intuition of how the Softmax function generalizes to multiple dimensions.
+Just like logistic regression, we'll have integer classes
+but instead of just two classes. We could have multiple classes, and in this case we have four.
+We'll also have feature vectors or tensors and each sample.
+Each sample will correspond to a different row in the matrix or tensor X.
+Just like logistic regression the Softmax function will use different lines to classify data.
+Let's start with an example to understand how the Softmax function works.
+In this example we have three classes and a one-dimensional feature vector x.
+Y equals 0 is denoted by the blue points,
+y equals 1 is denoted by the red points, and y equals 2 is denoted by the green points.
+Now, it is pretty evident from this plot that any point in this region will be classified as blue.
+Points in this region, will be classified as red.
+And points in this region, will be classified as green.
+Let's see how we can use different lines to classify these points.
+Here we have three different lines each having their corresponding weights and bias terms.
+Let's look at the outputs of these lines and see what happens when we plug in different values for x.
+If we plug a value of x in this region, it turns out the output of the line z zero will be greater than the red and green lines.
+From the picture it is clearly evident the output of the red line is lesser than the blue line.
+Further, later in the video we will see, that the output of the green line is negative for points belonging in this region.
+Thus, we can conclude that for values of x in this region, z zero is greater than z one and z two.
+Similarly, if we plug a value of x from this region,
+the output of z one will be greater than the other lines.
+Thus, we can conclude that, the output of z one will be greater than z zero and z two for values of x in this region.
+Finally if we're in the green region the output of z two
+will be larger than any of the other lines.
+Thus the output of z two will be greater than z zero and z one for values of x in this region.
+Before we continue let's review the argmax function.
+The argmax function returns the index corresponding to the largest value in a sequence of numbers.
+Here the largest value in z is 100, and the corresponding index is 0.
+Thus, the argmax function will return zero.
+In this example, the largest value of Z is 10
+and the corresponding index is 7, so the argmax function will return a 7.
+Now, let’s combine the argmax function and the different lines we had from earlier for fully understanding the working of the Softmax function
+Here, we have the three lines along with the actual values for the weights and bias parameters.
+So let's say we have a sample of x equals minus 0.5.
+Plugging in this value of x in each line, we get an output for each line.
+For the green line we can't really see the output since it's negative.
+We store these outputs in the following table with the index i corresponding to the line number and apply the argmax function to the table.
+Since the largest value corresponds to z zero.
+The argmax function returns zero and y hat equals 0.
+That’s the SoftMax prediction for that sample.
+Let’s look at another example. This time the value of x is equal to 0.5
+Plugging in the values of x in the different lines and storing the outputs in a table.
+And applying the argmax function we notice that this time the largest output
+corresponds to index 1and thus y hat equals 1.
+So Softmax will classify this sample as class 1.
+Finally, let’s select the value of x as 1.5.
+Plugging in the values of x in the different lines and storing the outputs in a table.
+And applying the argmax function we notice that this time the largest output
+corresponds to index 2 and thus y hat equals 2.
+So Softmax will classify this sample as class 2.
+Now, let’s cover the Softmax function for the general case where we will have multi dimensional inputs.
+We’ll use the MNIST dataset for explaining how Softmax works for the general case.
+The MNIST dataset is used for classifying handwritten digits into different classes ranging from 0 to 9.
+For each handwritten image we are going to concatenate it to a vector as follows.
+Since each image is a greyscale image, the intensity values for each pixel can range from 0 to 255.
+Further, each image in the MNIST dataset comprises of 784 pixels,
+thus our vector has 784 values in it.
+To visualize the softmax function, we'll consider vectors in 2 dimensions.
+Visualizing and plotting 784 dimensions would be extremely difficult.
+To visualize Softmax in 2D, you can think of the samples as vectors.
+Here we have three weight parameters w 0, w 1 and w 2, the vectors values are shown in the table.
+These vectors represent the parameters of Softmax in 2D.
+The Softmax function is used for finding the points nearest to each parameter vector.
+So anything in this quadrant will be classified as blue because its nearest to the vector w 1.
+Similarly, anything in this quadrant will be classified as red because it’s nearest to the vector w 0.
+We can do the same for the green parameter
+Let’s look at few examples. For the sake of simplicity,
+we’ll use the x 1 vector to represent 0 in 2 dimensions.
+The Softmax function will first perform the dot product of x 1
+with each of the w vectors. It will then call the argmax function,
+which will return 0 and Softmax will classify this sample as class 0.
+Intuitively as well we can see the sample x 1 is nearest to w 0 compared to w 1 and w 2
+Let’s look at another vector x 2 which represents the number 1 in 2 dimensions.
+Computing the dot product, and using the argmax function on the computed values,
+we see that we will classify this sample belonging to class 1.
+Mathematically, the dot product for the vectors is calculated by performing matrix multiplication for each vector
+as explained earlier in the previous modules
+The reason the function is called Softmax since the actual distances i.e.
+dot products for each input vector with the parameters
+is converted to probabilities using the following probability functions.
+Similar to logistic regression. In the next videos, we will see how to use Softmax in PyTorch
+for performing classification by specifying the loss criteria as cross entropy loss.
+Thank you for watching this video!
+
+Errata Reading: Softmax
+In this video, you explore the Softmax function, a fundamental component in multi-class classification tasks. The Softmax function extends logistic regression to handle multiple classes, converting raw model outputs into probabilities that sum to one. This video provides a thorough understanding of how Softmax works in both one-dimensional (1D) and two-dimensional (2D) spaces, helping you visualize and implement it effectively.
+
+By the end of this video, you will:
+
+    Describe the Softmax function and its role in multi-class classification.
+    Visualize and interpret the Softmax function in both 1D and 2D spaces.
+    Explain the interplay between Softmax and the argmax function in making classification predictions.
+    Implement Softmax in PyTorch, using it for classification problems with multiple classes.
+
+Topics covered in the video:
+
+1. Introduction to the Softmax function:
+
+The topic starts with an overview of the Softmax function, explaining its role in classification tasks where multiple classes are present. Unlike logistic regression, which deals with binary classification, Softmax can handle scenarios where inputs belong to one of several classes.
+
+2. Softmax in one dimension (1D):
+
+You will explore the Softmax function in a one-dimensional space with an example involving three classes represented by blue, red, and green regions. The video shows how Softmax assigns classes based on the outputs of three lines with specific weights and biases. By comparing these outputs, Softmax determines the class with the highest score using the argmax function.
+
+3. Review of the Argmax function:
+
+To understand how Softmax makes predictions, the topic briefly reviews the argmax function, which identifies the index of the maximum value in a sequence. This function plays a crucial role in selecting the predicted class in Softmax-based models.
+
+4. Combining argmax and Softmax:
+
+You will combine the concepts of Softmax and argmax to fully grasp how predictions are made. The video walks you through multiple examples where values of x are passed through the Softmax function, and the corresponding class is selected based on the highest output.
+
+5. Softmax in two dimensions (2D):
+
+Moving beyond 1D, the topic introduces Softmax in a two-dimensional context using the MNIST dataset, which classifies handwritten digits. To simplify visualization, the discussion is limited to 2D vectors, highlighting how Softmax uses weight parameters to determine the nearest class for each input.
+
+6. Visualizing Softmax function:
+
+The topic emphasizes visualization, showing how Softmax classifies inputs based on their proximity to weight vectors in 2D space. This intuitive approach helps reinforce an understanding of how Softmax makes classification decisions.
+
+7. Practical application in PyTorch:
+
+Finally, the topic sets the stage for applying Softmax in practical scenarios using PyTorch. It hints at upcoming videos where Softmax will be combined with cross-entropy loss to perform robust classification tasks in deep learning models.
+Feedback and suggested improvements:
+
+The feedback from learners highlighted a few areas that need refinement for better clarity and accuracy:
+
+1. Correct region sizes and boundaries (Timestamp 1:17):
+
+The blue, red, and green regions were incorrectly sized, with the red region overlapping points that should belong to the blue and green classes. Adjust the sizes to more accurately reflect class boundaries.
+
+2. Precision of lines (Timestamp 2:10):
+
+The lines used to separate classes should be drawn more precisely. Misleading or inaccurately placed lines can confuse viewers about the true decision boundaries of the Softmax function.
+
+3. Alignment of array values and indices (Timestamp 2:59):
+
+The alignment of array values and their indices is inconsistent, leading to potential misinterpretation. Ensure that indices are correctly positioned above their corresponding values.
+
+4. Diagram line connections (Timestamp 4:14):
+
+Lines in the diagrams should start and end at the correct points to accurately represent connections. This will prevent misunderstandings about the relationships being illustrated.
+
+5. Correct labeling of images (Timestamp 4:48):
+
+At one point, an empty image is labeled as "1". Replace this with an actual image of the character "1" to maintain visual consistency and avoid confusion.
+
+By addressing these feedback points, the video will offer a clearer, more precise explanation of the Softmax function, enhancing the learning experience for all viewers.
+
+Softmax Function: Using Lines to Classify Data Prediction
+(Music)
+In this video, we'll talk about Softmax prediction.
+We use the Softmax function when
+we have a dataset that consists
+of inputs which can be classified
+into one of multiple output classes.
+Up until now, we have classified our data in
+PyTorch as either belonging
+to one of the two classes, i.e.
+class 0 or class 1.
+In this video, we'll look at how we can
+use Softmax to classify
+our input into one of
+the many classes belonging to the output.
+Here is how the directed graph
+of the Softmax function looks like.
+The graph is identical to that of
+a multi-output linear regression.
+The model is identical to
+a multiple output linear regression.
+But instead of y, we use z.
+For classification, we are interested in
+the column indexes that
+pertain to the maximum value of z.
+We'll go more in depth into this in the next video.
+But for now, let's just get
+a better idea of how the PyTorch function works.
+We can apply the Softmax function to
+multiple input samples as well.
+Let's talk about implementing
+the Softmax function in PyTorch.
+As we saw previously with logistic regression,
+we can create a custom module for Softmax
+using the nn.module package in PyTorch.
+Here's how we would implement the Softmax function in
+PyTorch if we were implementing it from scratch.
+If you notice carefully,
+this implementation is very similar to
+our custom logistic regression
+implementation which we had earlier.
+The only difference is, instead of one,
+we are now using an out size
+parameter in the constructor of this class.
+The parameter corresponds to
+the number of classes in the output.
+In addition, there is no logistic function in the output.
+Let's try to use the Softmax class we just wrote.
+Here, we use the Softmax constructor for our model.
+We pass in two as the first parameter since we have
+a two-dimensional input sample and three as
+the second parameter since we have three output classes.
+We'll use our color model to illustrate what's going on.
+We have our input tensor with two dimensions which
+we input into our model to get an output z.
+Z will look something like this.
+We have the column indexes side-by-side
+to the actual values of z on the right.
+We call the max function on z.
+The argument of one indicates that we want to get
+the maximum value from z with respect to axis one.
+In simple terms, this means we want the index
+pertaining to the max value from
+z with respect to each column.
+Since z only has one row,
+comparing all the columns values
+of z for only this one row,
+we see the column with index one
+corresponds to the largest value in z.
+In the output, we get the column index
+corresponding to the largest value in z which,
+in this case, is one.
+This would represent the class of the sample x.
+Let's look at the case, when we
+have multiple multidimensional inputs.
+Going back to our color model,
+we can represent this scenario as follows: we pass
+in x to our Softmax model and get z as the output.
+Again, here we have the column indexes
+side-by-side with the actual values of z.
+We call the max function on z,
+passing one as the argument which will find
+the maximum index value with
+respect to the columns for each row in z.
+So for the first two samples,
+the maximum index corresponds to column 1,
+and for the last sample,
+the maximum index corresponds to column 2.
+As a result, each value in yhat would
+represent the class of each of
+the corresponding rows in x.
+Let's do a more detailed example in the next few videos.
+(Music)
+
+Errata: Softmax Function – Multi-class Classification in PyTorch
+
+This errata highlights important clarifications and corrections related to the video titled “Softmax Function: Using Lines to Classify Data Prediction.”
+Overview:
+
+The video introduced the Softmax function for multi-class classification in PyTorch. It explained how Softmax extends binary classification to handle multiple classes by converting raw outputs into probabilities. However, there were a few points that require clarification regarding terminology and function usage in PyTorch.
+Corrections and Clarifications:
+
+Predicted Class Identification:
+
+    The video referred to the use of the max function to identify the predicted class from the Softmax output tensor z. This may have led to confusion.
+
+    In practice, torch.argmax() should have been used to identify the index (i.e., the class label) of the highest value in the output tensor.
+
+    While max() returns both values and indices, argmax() directly returns the index of the maximum value, which is the correct method for determining predicted classes.
+
+Terminology – Output Values (z):
+
+    The term “z” was used in the video to describe the raw outputs (logits) from the model prior to applying the Softmax function.
+
+     It should have been clarified that Softmax converts these logits into normalized probabilities, and predictions are made by identifying the index of the highest probability.
+
+Softmax Output Interpretation:
+
+The video likened the Softmax operation to a multi-output linear regression. While this structural comparison was valid, it should have been emphasized that unlike regression outputs, Softmax outputs are interpreted as class probabilities, not raw scores.
+Implementation Clarification:
+
+The video demonstrated how to implement a custom Softmax module using PyTorch’s nn.Module. This implementation was similar to logistic regression, with an added parameter for the number of output classes.
+
+When inputs were passed through the model:
+
+    The resulting tensor (z) represented the logits for each class.
+
+    These logits were then transformed into probabilities using the Softmax function.
+
+    To determine the predicted class, torch.argmax(z, dim=1) should have been used, selecting the class with the highest probability for each input.
+
+Handling Multiple Inputs:
+
+The video also covered scenarios involving multiple multi-dimensional inputs. These inputs were passed through the Softmax model to produce a set of logits per input.
+
+It should have been clearly stated that:
+
+    The predicted class for each input was based on the index of the highest probability in the Softmax output.
+
+    This was correctly achieved using torch.argmax(z, dim=1) where z is the output tensor.
+
+Summary:
+
+    The correct function to determine predicted classes from Softmax output is argmax, not just max.
+
+    Softmax outputs represent probabilities, not raw values.
+
+    Clear distinction should have been made between logits (z) and probability-based predictions.
+
+These clarifications help ensure accurate understanding and implementation of Softmax for multi-class classification in PyTorch.
+
+Softmax PyTorch
+(Music)
+In this video we’ll look at how we can start using the Softmax function in PyTorch for performing classification.
+The essential steps for performing any kind of classification in pytorch are as follows:
+First, we need to load our data. Next, we create our model.
+Next we train the model on training data, and finally we view the results by using our model to classify test data.
+Let’s begin by loading our data.
+We'll import the common modules used before, and further we'll also include torch vision dot transforms and torch vision dot datasets.
+Torch vision dot transforms provides us with a lot of useful transformation functions that can be used for computer vision.
+Torch vision dot datasets has many useful pre-built datasets that can be used with our classification models.
+So here, we load the MNIST dataset.
+We have a training dataset and a validation dataset for our input data.
+We'll use our validation dataset as the test dataset for our classification models.
+Just a small note, since in previous lectures we have used the terminology of validation set,
+we'll use the same here to maintain uniformity. So, for our training dataset, we specify the train parameter equal to True while loading the data.
+We also specify the transform parameter as transforms dot to tensor
+and by specifying this all the MNIST images will be loaded as Pytorch tensors.
+We do the same for the validation dataset. The first element of the train dataset contains a tuple.
+The first element of the tuple is the actual MNIST image loaded as a tensor,
+and the second element of the tuple is the actual class of the image, which in this case is 2
+Similarly, the second element of the training dataset is also a tuple containing the image and the class of the image.
+Thus, all elements of the training dataset will be in this form.
+Now, let’s take a closer look at a single tuple of the training dataset.
+The first element of the tuple is a 28 by 28 float tensor of the image
+and the second element contains a long tensor which is the actual class of the image.
+In this case the image is 2 so the second element of the tuple will be a 2.
+Now let’s talk about creating a model for performing classification.
+We’ll use our Softmax classifier that we created previously.
+We’ll concatenate our 28 by 28 images to a 1D vector.
+our images are 28 by 28 dimensions our input dimension will be 28 times 28 to the SoftMax classifier.
+Also, since we have 10 output classes our output dimension will be 10.
+As learnt previously, the Softmax classifier uses parameter vectors for classification.
+Since we have 10 output classes we’ll have 10 weight parameters and 10 bias parameters for Softmax.
+Each parameter will be 784 dimensions long.
+Here’s a visual representation of one such weight parameter.
+Let’s convert this parameter to an image and we see that since PyTorch initializes
+all the parameters randomly this image just looks like random noise.
+In the labs, we have provided the plot parameters function for you to
+visualize the initial values of these parameters which initially look all like noise.
+Next, we specify our loss criterion function as cross entropy loss.
+In PyTorch, when the loss criteria is specified as cross entropy loss,
+PyTorch will automatically perform Softmax classification based upon its inbuilt functionality.
+Another note, the input for the loss criterion here needs to be a long tensor with dimension of n,
+instead of n by 1 which we had used previously for linear regression.
+Here, we are simply specifying our optimizer and learning rate for our model,
+just like we did for logistic regression. We also have a few other parameters
+that we will use to keep track of the number of epochs, the misclassified samples and the correctly classified samples.
+So we create our train loader and our batch size will be 100.
+Similarly, we define our validation loader and our batch size will be 5000
+and again this is technically our test data
+Now, let’s train our model.
+The code for training the model is in the above left half of this slide.
+As you can see, everything looks identical except for the view method.
+What this line does is that for each element in the training batch it converts the rectangle tensors in a batch to a row tensor.
+Now, let’s look at one epoch.
+In a single epoch, we first train the model with the train_loader.
+Let's use the block to represent the part of the code that represents training.
+Then, we test our model with the validation dataset.
+Let’s take a closer look at how our validation samples look.
+These two lines of code will first produce an output.
+Then, they will calculate the max of the predicted output on the validation data.
+Let’s take a closer look at this line of code. If we look at our predicted class y hat,
+we'll get the largest element of Z and y test will be our actual classes.
+What this line of code does is that it compares each element of y hat with the corresponding element of “y test”.
+We get a binary vector, which contains 1 at the index
+if there's a match at the corresponding elements of y hat and “y test”.
+Other wise it contains a zero if there isn't a match.
+We sum all the values in this binary vector. For this toy example, the result will be a 4.
+We’ll convert the result to accuracy and store it.
+Now, let’s view the results of classification of the Softmax model.
+So before training, our weights looked like random noise.
+After training, our weights start looking like our output classes
+which in this case are the numbers from 0 to 9.
+Check out the lab for more information And that’s the Soft Max function for you!
+Thank you for watching the video.
+(Music)
+
+Module 3 Shallow Neural Network:
+What's a Neural Network?
+(Music)
+In this video we will provide an overview of Neural Networks using an example with one Hidden layer
+In this video we will cover: Introduction to Neural Networks with One Hidden Layer featuring Two Neurons.
+Create a Neural Network with One Hidden Layer using nn.Module.
+Create a Neural Network with One Hidden Layer using nn.Sequential.
+FInally, how to Train the Neural Network model.
+A neural network is a function that can be used to approximate most functions using a set of parameters.
+Let's look at an example for classification.
+Let's look at an example of classification where we overlaid the color over the feature.
+In the context of neural networks its helpful to think of the classification problem as a decision function.
+Just like a function when y equals one
+the value is mapped to one on the vertical axis.
+We can represent the function like a box, this box function is an example of a decision function.
+Any values of x in the following region is one, any value of x in this region is mapped to zero.
+Let’s Build a Neural Network with a few Linear Classifiers.
+In this example we cannot use a straight line to separate the data.
+We can also view the problem as trying to approximate the box function using logistic regression.
+This line can be used to linearly separate some of the data,
+but some of the data is on the wrong side of the line. We can use the following node to represent the line
+and the edges to represent the input x and output z
+If we apply the logistic function, in the context of neural networks
+this is called the activation function. These values of the function are incorrect
+and we get an incorrect result in this region.
+We can represent the sigmoid function with the following node
+taking the input z from the linear function and producing an output,
+technically “A” is a function of z and x. We will call the function “A”
+the activation function and the output of of “A” is called the activation.
+This line can also be used to linearly separate some of the data
+but some of the data is on the wrong side of the line.
+this line looks like it can be use to separate the data
+but lets see what happens when we apply the sigmoid function.
+After applying the sigmoid or activation function, we get an incorrect result for most of the samples
+Consider the following sigmoid functions
+we call them "A sub script one” and “A sub script two”.
+If we subtract the second sigmoid function from the first sigmoid function.
+We get something similar to the decision function,
+we can also apply the following operations with a linear function
+i.e just subtract the second activations from the first activation function.
+we will use the following graph to represent the the operation.
+The "A sub script one” and “A sub script two” represent the two sigmoid functions.
+The superscript represent which layer of the neural network we are on.
+If we apply a threshold setting every value less than 0.5 to zero
+and grater than 0.5 to one. We get the exact function we are trying to approximate.
+We can use the graph to represent the process, we apply two linear functions to x and we get two outputs.
+to each linear function we apply a sigmoid,
+we then apply a second linear function to the outputs of the sigmoid.
+We usually apply another function to the output of this linear function then apply a threshold.
+This diagram is used to represent a two-layer neural network, we have the hidden layer.
+The second layer is called the output layer. Each linear function and activation is known as an artificial neuron.
+In this case the hidden layer has two artificial neurons.
+The output layer has one artificial neuron.
+As models get more complicated. we will use the following representation,
+the non linear term overlapping the linear term,
+some times we will leave out the bias term.
+As models get more complicated, we will sometimes only show the number of layers and artificial neurons
+and drop the parameters. Its helpful to look at the outputs of each component of the neural network.
+The output of the linear component is a 2D plane that looks like this.
+These red data points get mapped to these points in the 2D plane.
+These blue data points get mapped to these points in the 2D plane and so on.
+This output is not very insightful.
+Let's look at the activation, the outputs of the activation function is a 2D plane that looks like this.
+These red data points get mapped to these points in the 2D plane
+These blue data points get mapped to these points in the 2D plane and so on.
+It turns out that we can split the point using the following plane.
+This is what the linear function on the second layer does.
+Lets see how to built a neural network in PyTorch.
+We will need to import the following libraries, in this case we import sigmoid directly.
+Here is the class we created for a neural network
+we repeatedly apply linear functions and activation functions.
+We will call the class net. Let's review the different components for the network we discussed earlier,
+we use the linear class to represent each layer. The hidden layer is given by the first linear constructor.
+The output layer is given by the second linear constructor.
+In the constructor, we start with the size of the input to the network
+In this case one, this is used in the constructor to the first linear function in the class or module.
+In this class H is the number of neurons, it is the size of the output of the linear function.
+In this case H is two.
+H is also the number inputs to the second linear layer.
+D under score out is the size of the output layer.
+After we create a neural network object, we can apply it to a tensor as follows.
+Just like the other methods forward makes the prediction. Let's see what happens.
+The linear operation is applied to x.
+the function sigmoid applies a sigmoid function to the two outputs of the first linear function.
+The second linear function is applied to the output of the two sigmoid functions.
+The second sigmoid function applies a sigmoid function to the single output of the linear function.
+The output is then returned.
+In summary, we apply two linear functions to x and we get two outputs
+to each linear function we apply a sigmoid. We then apply a second linear function to the outputs of the sigmoid
+We usually apply another function to scale the output.
+Just a note, we can also use Neural networks for regression
+by simply removing the last sigmoid function and changing the loss function,
+we will show you how in some of the labs.
+A neural network is essentially performing matrix multiplication, let's look at the matrix interpretation.
+As you recall, linear is essentially a matrix.
+Let's represent the sample x as follows with an orange box.
+We can interpret the operations as follows in this case our matrix W has 1 row
+and two columns similar for the bias. Is the number of columns in the matrix
+is W is two representing the number of neurons.
+The number of rows is 1 representing the input size.
+We will apply a sigmoid to each of the elements of self dot linear,
+the result is still a two by two tensor.
+the second linear applies the following matrix operation.
+The parameters has 2 rows representing the size of the inputs
+and 1 column representing the neuron.
+We then apply a sigmoid function to the output.
+For multiple samples the process is the same, we can represent it as a matrix operation.
+The operation is applied to every row in x,
+as a result each row in z represents a sample
+and each column is the output of the artificial neuron to that particular sample.
+We then apply the sigmoid output.
+We then apply the linear function to each row and we get an output for each row.
+We then apply a sigmoid function to each output, the result is a tensor.
+to get a discrete value you will need to apply a threshold, here is one way to do it.
+The method state dictionary has the model parameters,
+we have the parameters for the first linear term as well as and the second linear term.
+We have the parameters for the first linear term and the second linear term.
+Let review nn.Sequential.
+The process for Sequential is the same,
+we input the linear constructor with the input and output dimensions.
+we add the sigmoid function, we add the second linear function.
+We add the final Sigmoid function, we can then apply the model to a tensor.
+Let's see how to train the model. The training procedure is similar to the other methods.
+We create the data, we create a training function.
+In this case, we cumulate the loss iteratively
+to obtain the cost, we will try different metrics in different labs.
+The process for training is identical to logistic regression,
+we create a BCE Loss. Then, we create the X and Y values for our dataset
+We create a our model, we specify two hidden layers,
+we create an optimizer, then train the model.
+See the lab for more.
+(Music)
+
+More Hidden Neurons
+(Music)
+In this video we will review how adding more Neurons to the hidden layer will give our model more flexibility.
+In this video we will review: How adding more neurons in the hidden layer can improve the model
+Create a Neural Networks with more Neurons in the hidden layer using nn.Module and nn.Sequential.
+Consider the following samples, if we use the same decision function. The samples between -5 and 5 are misclassified.
+Shifting the function will not help, in this case most of these samples are misclassified.
+Scaling will not help as before the samples between -10 and -5 are misclassified.
+The model is not flexible enough.
+Ideally we would like to add another function, we can do this by adding more neurons to the hidden layer.
+Let's see what happens when we multiply the outputs of the activations by the parameters in green.
+Symbolically we are going to look at the activations. Multiply it by the weights and add them together.
+Let's use images rather then equations to demonstrate what is going on.
+Let's look at the following neurons, the output of the first neuron multiplied by the weight will give you the following sigmoid function
+we then add the output of the second neuron multiplied by the weight
+Followed by the third neuron multiplied by the weight, the result looks like this.
+We repeat the process for the next neuron. The output of the 4th neuron multiplied by the weight will give you the following function
+adding it to the rest of the neurons it begins to look similar to what we need.
+We add the output of the 5th neuron multiplied by the weight.
+We add the output of the final neuron multiplied by the weight.
+The function has the same shape we require but the vertical axis is off.
+The issue can be solved by applying the sigmoid function, we see the scaling problem is gone,
+the resulting function is a good candidate to classify the data.
+Let's see how to build this network with PyTorch. We will need to import the following libraries.
+This is the class to get our dataset, this is the class for creating our model.
+We will create a function to train our model, we cumulate the loss iteratively to obtain the cost.
+The process for training is identical to logistic regression, we create a BCE Loss.
+We create a dataset and training loader. We create a our model.
+We specify 6 neurons in the hidden layers, we create an optimizer
+in the lab we use the adam optimizer, which will discuss later then train the model.
+We can use nn.sequential module as follows,
+for more accurate prediction, we added 7 neurons to the hidden layer.
+When we graph our model along with the training points,
+we see that our model makes accurate predictions for the training points.
+
+Neural Networks with Multiple Dimensional Input
+(Music)
+In this video, we will review Neural Networks that takes in multidimensional input data;
+we will illustrate this using an example where the input data is two dimensional.
+In this video, we will discuss: Networks with multiple dimensional input,
+we will focus on the case where the input is 2 dimensional. Constructing Networks with Multiple Dimensional input in PyTorch.
+We will introduce the problem of Overfitting and Underfitting.
+In the last video, we showed how we can add more neurons to give our neural network more classification ability.
+In the same way, we can add more dimensions to the input, notice that there are a lot more weights between the input layer and hidden layer,
+we will leave out the bias terms for now.
+Consider the following samples in two dimensions where the data points are blue for y equals 0,
+and red for y equals 1. The subsequent line does not separate the two classes.
+In the same way, the following line cannot separate the two classes. Let's look at the problem as a function.
+In this diagram, we use the color to represent the output of the function in the different regions,
+any point in the red area the function will output 1,
+and any point in the blue area, the function will output 0 this point y hat equals one.
+Similarly, this point y hat equals one, at this point, y hat equals 0 Similarly, this point y hat equals 0.
+In this case, all these samples here are mis-classified.
+Using three neurons we will have a different function,
+everything in the blue region y hat will equal 0,
+and everything in the red region y hat will equal 1. For example, in the following points y hat has a value of zero.
+In the red region, y hat equals one. We see the function is not linear,
+but it still appears that the following points are not correctly classified.
+It appears that four hidden neuron’s appear to do the trick, the following points are classified as 0.
+The following points are classified as 1.
+We see that the samples that belong to class zero are in the correct region. We see that the samples that belong to class one are in the correct region.
+It would be easier to see if we visualize this problem in a higher dimension,
+here, we added an extra dimension to represent y and yhat. So,
+the surface has a y hat value of zero in the area where the data was labeled with the colour blue.
+The surface has a y hat value of one in the area where the data was labeled with the colour red.
+Lets tackle the problem of Multiple Dimensional inputs in PyTorch.
+We will need to import the following libraries.
+We will create a data set class as shown in the following image. This is the class for creating our model.
+We will create a function to train our model, we cumulate the loss iteratively
+to obtain the cost, we also determine the accuracy using a function see the lab.
+The process for training is identical to logistic regression on a signal dimension neural network.
+We create a BCE Loss, we create a dataset object and training loader.
+We create a our model, we specify two input dimensions and four neurons in the hidden layers.
+We create an optimizer, then train the model.
+We can see as the total loss or cost decreases the accuracy gets better.
+Note that in the lab, you might get one of the 2 versions of the solution shown here.
+We will introduce the problem of overfitting and underfitting. What are the causes of Overfitting?
+Overfitting occurs when your model is too complex for the data.
+Cause of overfitting is, when there are too many neurons in the hidden layer.
+What are the causes of Underfitting? Underfitting occurs when your model cannot capture the complexity of the data.
+Cause of underfitting is when there are too few neurons in the hidden layer.
+Lets generate the dataset for our example of overfitting and underfitting
+The decision function looks like this, the data points on one side of our decision function is red,
+and the datapoints on the other side of the decision function is blue. Let's add some noise to our dataset.
+As you can see, some datapoints are on the wrong side of the decision boundary.
+When we add some noise to the data points, some samples are not on the correct side of the boundary.
+In this example, we generate a decision region using a neural network with too many neurons in the hidden layer.
+You can see that our decision region is too complex and misclassifies some of the datapoints.
+In this example, we generate a decision region using a neural network with too few neurons in the hidden layer.
+You can see that our decision region is not complex enough to correctly classify some of the datapoints.
+There are several ways to solve the problem of overfitting and underfitting.
+Use validation data to determine the optimum number of neurons such that:
+there is not too many neurons or not too few neurons.
+Get more data, regularization which will be discussed in later sections.
+(Music)
+
+Multi-Class Neural Networks
+In this video, we will cover Multiclass Neural Networks.
+We will introduce Multiclass Neural Networks and how to implement Multiclass Neural Networks
+in PyTorch.
+In PyTorch, in order to classify multiple classes, you simply set the number of neurons
+output layer to match the number of classes in the output of the problem.
+For example, if the output of the problem consists of three classes, you should add
+three neurons to the output layer of your model.
+Each neuron has its own set of parameters and can be expressed as a row in a matrix.
+Each neuron has as many input parameters as neurons in the previous layer.
+We did not include the bias here.
+Let us use colors to represent each neuron in the output layer of the model.
+Red for neuron 0, blue for neuron 1, and green for neuron 2.
+The process to make prediction in Multiclass Neural Networks is similar to using Softmax,
+which we discussed in the previous modules.
+To illustrate this, let's start an example with three classes.
+For an input, we will obtain a value in each of the three neurons in the output layer.
+We choose the class with a neuron that has the largest value as the output of the model.
+In this case, neuron 2 has the largest value, so the output of our model is 2.
+It's helpful to think of the operation in terms of Softmax regression or linear transformation.
+Consider an example where we have four neurons in the hidden layer.
+We replace the features x with the activations of the neurons from the hidden layer.
+For each class in the output layer, we have a neuron.
+The column in the matrix represents each neuron.
+In this case, we have three classes.
+Our matrix has three columns.
+As with other linear transformations, we have three biases.
+The number of rows in the matrix is the number of neurons in the previous layer.
+In this case, we have four neurons in the previous layer.
+As a result, we have four rows in our matrix.
+To make a prediction for a given input, it's similar to using a Softmax classifier.
+For each class, we get an input.
+We select the index of the column with the largest value as the class.
+In this case, the class is 2.
+You can also apply the Softmax method for the 2 class problem.
+In this example, we have two outputs in the output layer of the neural network.
+As our models get more complex, we will drop the edges representing the weights and only
+show the layers and neurons for a simplified overview of the neural network.
+We have the input vector with d dimensions, followed by the hidden layer, then the output
+layer.
+Let's make a multi-class neural network in PyTorch.
+The class to construct a neural network is similar to the one that we used previously.
+The only modification is that we set the number of neurons in the layer to match the number
+of classes in our problem.
+And in addition, we drop the activation function in the last layer.
+Like previously, we have the size of the number of input features.
+We construct an nn.linear object that we call Linear1, which has the parameter d in
+representing the input features.
+This will be used in the forward function.
+For the second parameter, we have the number of neurons in the hidden layer.
+This is used as the parameter of our Linear1 and Linear2 object.
+This will be the number of columns of x in the forward function.
+dout is the number of classes for our problem.
+This is the other parameter we use to construct the Linear2 object.
+In the forward function, the output x has as many columns as classes.
+We could also use the nn.sequential module to construct our neural network model for
+the multi-class problem.
+Here, input dim is the number of input features.
+Hidden dim is the number of neurons in the hidden layer.
+Output dim is the number of classes in the output of the model.
+In the lab, we will be using the MNIST dataset.
+We will create a validation and training dataset object.
+We will create a validation and training loader.
+We will use the cross entropy function as the criterion for the loss.
+The MNIST dataset contains handwritten digits from 0 to 9.
+We denote the target of the MNIST dataset with a variable y.
+The variable represents the known classes or labels.
+Since we have 10 classes representing the digits, y can take on the values from 0 to 9.
+We convert the image of the handwritten digit to a tensor with 784 elements.
+In the training function, we store the training loss and validation accuracy.
+In this example, we calculate the training loss for each iteration.
+We calculate the accuracy on the validation data for each epoch, just like using Softmax
+by selecting the output with the highest value.
+When we create model for our neural network, we have the number of input dimensions, the
+number of hidden neurons.
+We also input the number of classes, then create the optimizer.
+We then train the model.
+We plot the training loss for each iteration and accuracy for each epoch using the validation
+data.
+In the lab, we can print out the misclassified samples.
+For example, this sample was misclassified.
+Even for a human, it's hard to figure out what number it is.
+In addition to adding an output layer, we can add more hidden layers, but it turns out
+these networks are harder to train.
+We will learn why next section.
+
+Backpropagation
+Music
+In this video, we're going to discuss back propagation.
+In particular, we'll do a toy example of back propagation, and we'll discuss the vanishing gradient.
+We will cover: a toy example of back propagation, and we'll discuss the vanishingmgradient.
+There's a lot of math in this section, the details are not important
+all you should take away is: back propagation reduces a number of computations
+involved in calculating the gradient; and the problem of the sigmoid function i.e., the vanishing gradient.
+A neural network is a function of another function. The function “z”, is applied to “X”
+and then the function “a”, is applied to the function “z”. To help illustrate the process we're going to use these set of gears.
+And we have the gear X, and the gear X rotates at a certain rate, and the gear X affects the gear “A”.
+But there's also an intermediate gear and we'll denote it by a “Z”.
+So it turns out that the rate of “A” is affected by “Z”, and then by “X”.
+So the derivative “A” with respect to X,
+is the derivative of X with respect to Z.
+Multiplied by the derivative of a with respect to Z. And we call this the chain rule.
+Let's take a look at this simple toy example of a neural network with one hidden layer and one output layer.
+We have the cost, let's look at one sample. We will write the output yhat interims of the activation.
+We have some training data and would like to perform gradient descent to determine the parameters.
+We need the values of the gradient to perform gradient descent on these two terms.
+So let's calculate the derivative or gradient.
+We have a loss function lets just use a squared error in this case.
+The derivative of the output layer with respect to our first parameter in the output layer.
+is the derivative of the loss function with respect to the activation on the output layer.
+Then we have to take the derivative of the activation with respect to the linear input z superscript 2.
+Then we’ll have to take the derivative of z superscript 2 with respect to our parameter.
+We now have the derivative of the weight in our output layer.
+Things get a little more complicated when we want to calculate the derivative of the parameter in the hidden layer.
+As before we have the derivative of the loss function with respect to the activation on the output layer.
+Then we have to take the derivative of the activation with respect to the linear input z superscript 2.
+But instead of taking the derivative with respect to the first weight,
+we take the derivative of z superscript 2 with respect to the activation of the hidden layer.
+We then differentiate the activation of the hidden layer with the linear input z superscript 2.
+Finally we differentiate the z superscript 2 with respect to our final weight and we get the final expression.
+Back propagation uses the derivative of the first parameter in the output layer,
+to help us calculate the parameter of the next layer.
+Here's our two equations we are not interested in the actual equations; we’re just trying to understand the concept.
+Let's represent similar terms with colors,
+you can see these two blue terms are present in the output layer and in the hidden layer.
+We just replace the two blue terms with this red term.
+We can obtain a computational saving by using the red term from the first equation in the second equation
+Let's see what happens when we have a deeper network, with more layers, lets calculate the gradient of all the terms.
+Let's use colors instead of equations. We have the derivative of the output layer
+and the subsequent hidden layers with respect to the weights.
+We can represent the blue terms with the light blue term,
+we can then use this term in the gradient for the parameter in the preceding layer.
+We then repeat the process for the next two terms, replacing them with a lighter orange.
+we then use these terms in the gradient for the weight in the deeper hidden layer.
+Repeating the process for the final layer.
+In the final layer we have the following terms in our gradient,
+we can save these terms. Then use them to determine the final gradient.
+This problem gets much more difficult as we add more layers and neurons, fortunately
+Pytorch takes care of it all for you using the backwards method.
+The main problem with building deeper networks is the Vanishing gradient.
+Consider the following network, let's try to understand the vanishing gradient problem.
+Let's look at the gradient of the last term.
+If you look at the expression for the parameter it is a product of many gradients.
+If you look at the gradient of the activation they are all less than one for any given input
+As a result if any of the inputs are too large
+the gradient will be near zero,
+or the product of these small gradients will be almost zero.
+Therefore, as we add more layers the gradient will get smaller and smaller.
+As a result we cannot update the parameter value. To overcome this problem
+we can change the activation functions or we can learn optimization methods that can help reduce this effect.
+We will cover these methods in the next video.
+Music
+
+Activation Functions
+Music
+In this video, we will cover the commonly used activation functions that are used in neural networks.
+We will introduce: Sigmoid, Tanh and Relu activation functions.
+and how to implement these activation functions in PyTorch.
+The first activation function is the sigmoid function. Here is the mathematical formula for the sigmoid function.
+It has an upper-bound of 1 and a lower bound of 0.
+One of the main drawback with using the sigmoid activation function is the vanishing gradient.
+Let's take the derivative of the sigmoid function. When z is negative 10 the derivative of the sigmoid function is 0.
+When z is set to zero, the derivative of the sigmoid function is 0.25
+when z is set to 2.5, the derivative of the sigmoid function is 0.07.
+If you recall from back propagation the derivative of loss with respect to the weight
+is given by the following mathematical function.
+The graph here shows the sigmoid function in blue and its derivative in orange.
+As the product includes the derivative of a bunch of sigmoid functions,
+this will contribute to the problem of the vanishing gradient,
+because the product of numbers less than one will tend to go towards zero.
+The tanh function is another popular activation function.
+the upper-bound is 1, the lower bound is -1.
+The tanh function is zero centered as a result it has better performance,
+see the following paper for details.
+The following function shows the derivative of the Tanh function in orange and the tanh function in blue.
+You can see that except when z equals to 0, all the values of the derivative of tanh is less than 1,
+so the tanh function also suffers from the vanishing gradient problem as well.
+Our final activation function is the rectified linear unit function or relu function in short.
+The value of the relu function is 0 when its input is less then zero.
+If the input z is larger than 0 the input of the function will equal its output.
+If the input z equals 5, the output equals 5.
+If the input z equals 10, the output equals 10 otherwise it will equal zero.
+We will see the gradient as one as well as the input is grater than zero.
+But when the function is less than zero the derivative is zero.
+Since the derivative of the relu function is 1 for an input greater than zero,
+the relu activation function provides a partial solution to the vanishing gradient problem.
+We can compare all the activation functions in the following plot.
+Let's implement the sigmoid, tanh, and relu activation function in PyTorch.
+You can implement the sigmoid function by calling it during the forward pass, taking the linear function as the input.
+Net_Tanh is our model that implements the tanh activation function.
+In this case the tanh function is called during the forward pass, taking the linear function as the input.
+Finally “net relu’ is our model that implements the relu activation function.
+The relu function is called during the forward pass, taking the linear function as the input.
+Now we will learn how to construct the neural network model with the tanh and relu activation function
+using the nn.sequential module. We use the nn.Tanh object
+in the Sequential constructor. This process is similar for the relu,
+see the lab for examples.
+Using the same method to load and train the data as we did in multiclass we get the following result.
+When examining the loss with respect to iteration,
+we are able to achieve significantly better performance using the relu
+and tanh activation functions than with the sigmoid activation function.
+Again, when examining the validation accuracy with
+respect to the number of epochs, we are able to achieve significantly better
+performance using the relu and tanh activation function than with the sigmoid activation function.
+Music
+
+Module 4 Deep Networks
+Deep Neural Networks
+Music
+In this video, we will cover deep neural networks.
+In this video, we will review
+deep neural networks with multiple hidden layers,
+we will also show how to
+implement deep neural networks in PyTorch.
+Consider the following diagram of
+a neural network with D input dimensions,
+three neurons in the hidden layer,
+and an arbitrary number of neurons in the output layer.
+In the last section, we showed that by adding
+a hidden layer to a neural network,
+we can generate a decision function to
+separate non-linearly separable data.
+If we add more neurons to the hidden layer,
+we can obtain a more complex decision function
+but this leads to over-fitting.
+By adding more hidden layers,
+we usually increase the performance of our model,
+while decreasing the risk of over-fitting.
+In this example, we add one hidden layer.
+If a network has more than one hidden layer,
+it is called a deep neural network.
+In deep neural networks,
+hidden layers can have a different number of neurons.
+For example, the first hidden layer has
+3 neurons and the second hidden layer has 5 neurons.
+Let's see how to build a deep neural network in PyTorch.
+This is our neural network model with
+two hidden layers and one output layer.
+As before, D_in is
+the size of the number of input features,
+it is also the size of
+the input dimensions for each neuron in the hidden layer.
+This is the constructor for the first hidden layer.
+The parameter H1, is
+the number of neurons in the hidden layer.
+This is the constructor for the second hidden layer.
+The size of the input dimension for each number is H1.
+This is the number of neurons
+in the previous hidden layer.
+The number of neurons in the second hidden layer,
+is given by H2.
+Finally, we have our output layer.
+The size of the input dimension H2,
+is the number of neurons in the previous hidden layer.
+The number of neurons in the final layer,
+is equal to the number of classes and is given by D_out.
+Let's see how the forward function works.
+We take input x,
+we apply the function linear,
+and apply the sigmoid,
+and assign it to x.
+This is the first activation.
+We repeat the process for the second layer.
+This is the input to the output layer.
+We then apply the linear function
+to the final activation,
+given the output of the network.
+We can construct a deep neural network model
+with a tanh activation function.
+We only need to replace the sigmoid function with
+a tanh activation function in
+the forward function in the previous model.
+Again, we can also construct
+a deep neural network model
+with the relu activation function.
+We only need to replace the sigmoid function with
+the relu activation function
+in forward, in the previous model.
+Consider the following network.
+The first hidden layer has 3 neurons.
+As the input has 3 dimensions,
+each neuron will have 3 input dimensions.
+The second layer has 4 neurons.
+As the input has 3 dimensional,
+each neuron will have 3 inputs.
+The output layer has 3 neurons for each class.
+As a result, the input size is 4.
+Each neuron will have 4 input dimensions.
+The attribute parameters is
+a useful parameter to check the shape of the network.
+We could also use the nn.Sequential module
+to construct our deep neural network.
+Since we have two hidden layers instead of one,
+we just add an extra layer.
+Let's train our deep neural network model
+with the MNIST dataset.
+Here, we create a validation and training dataset object,
+we create a validation and training loader,
+and we create a cross entropy function.
+In the training function, we store
+the loss and validation accuracy.
+In this example, we calculate
+the loss for each iteration,
+we calculate the accuracy of
+the validation data for each epoch.
+We will use two hidden layers.
+We will have an input dimension of 784
+representing the number of pixels for
+the images in the MNIST dataset.
+The two hidden layers have 50 neurons each.
+The output layer has 10 neurons,
+each representing a digit from 0-9.
+We will use the Stochastic Gradient
+Descent optimizer to train the model.
+Here, we only use
+the sigmoid activation function for the model.
+But in the lab, we will also use models that
+implement the tanh and relu activation functions.
+In the lab, we will train deep neural network models
+for digital recognition using the MNIST dataset.
+We will use the sigmoid
+tanh and relu activation functions.
+We will see the relu and
+tanh activation function performs
+better than the sigmoid activation function,
+in terms of the loss.
+The relu and tan h activation function performs
+better than the sigmoid activation function
+in terms of validation accuracy.
+We can continue adding
+more hidden layers, building deeper networks.
+Later on, we will see how to add
+an arbitrary number of layers and train these networks.
+
+Deeper Neural Networks: nn.ModuleList()
+Music
+In this video, we will show how to build a deep Neural network in PyTorch using nn.Module list.
+This will allow you to automate the process creating a neural network with an arbitrary number of layers.
+We can add more and more layers to our network manually but this is time consuming and labor intensive.
+We will use the ModuleList in NN.Module package to automate this process.
+Let’s construct our neural network model. We create a list called layer,
+the first element of the list is the feature size; in this case, two.
+The second element of the list is the number of neurons in the first hidden layer;
+in this case, three. The third element is the number of neurons in the second hidden layer, which is 4.
+The fourth element is the number of classes in the output layer, which is three in this case.
+We use the list layer to construct our deep neural network model
+in the constructor, we create a module list object.
+We will use the list Layers to create the layers of our deep neural network.
+Here is the list in which we will be looping through.
+Each iteration we will be taking two consecutive elements from the list,
+for the first iteration, the variable input_size has the first term of the two consecutive elements that we select from the list.
+This corresponds to an input size of our first hidden layer.
+Output size is the second term of the two consecutive elements that we select from the list,
+it is the number of neurons of the first hidden layer.
+as the value is three, which sets the number of neurons in the first hidden layer,
+each neuron has an input dimension of 2.
+The second hidden layer for our deep neural network will be constructed in the second iteration of the for loop.
+Now we use the second element in the list Layers, this is the number of neurons for the previous layer.
+The third element in the list Layers will be the number of neurons in the second hidden layer,
+i.e we have 4 neurons, from the variable “input size” each neuron will have an input dimension of three.
+We will repeat this process to construct the output layer.
+Using the third element of the list as the input size,
+and fourth element as the output size.
+The output size is the number of neurons in the hidden layer or number of classes.
+Input size is the input dimension for each of the neurons.
+For the forward function we will iterate through the layers of the neural network.
+We will recursively apply the linear layers and then apply the activation functions.
+“L” is the number of layers in our neural network.
+We loop through each layer along with the index of the layer. We apply the linear transform and activation,
+here we use the relu activation function because it performs better than other activation functions.
+We do this until we get to the last layer. Since we are performing multiclass classification,
+for the last layer L we just apply the linear layer.
+As we have three classes for the output, we have three neurons.
+The training procedure is similar to that of the previous section.
+In the lab we will use the following data set.
+We can try different combinations of neurons and numbers of layers to see which combination gives the best performance.
+Now let's see some methods to improve the performance of these networks.
+Music
+
+Dropout
+Music
+In this video, we're going to discuss about the dropout method. This method improves the performance of deep neural networks.
+In particular we will talk about dropout, a method used to prevent over fitting.
+We will show how to implement the dropout method in PyTorch.
+Let's say, we have a decision boundary that separates samples into two classes,
+on one side of the decision boundary we have y=1 which is represented as red,
+and on the other side of the decision boundary we have y=0 which is represented as blue.
+In the real world, it is highly unlikely that we have a sample that can be cleanly separated by a decision boundary.
+The sample here is noisy, that means some data will fall on the wrong side of the decision boundary.
+Our decision function looks like this, if we use too many parameters in our neural network model, for example,
+too many layers or too many neurons, we risk overfitting.
+If our model is overly simplified, we risk underfitting.
+We could try different combinations of the number of neurons and layers,
+but it will take too much time and resources. A solution is to start with a model that is complex,
+and apply a form of regularization call dropout.
+Dropout is a popular regularization technique use exclusively for neural networks.
+Dropout involve two phases: The training phase is where we implement the dropout method.
+And the evaluation phase, where we turn off the drop out method to test the performance of our model.
+The dropout is implemented by multiplying the activation function with the Bernoulli random variable r.
+The Bernoulli distribution is a discrete probability distribution
+where the random variable r takes on the value 0 with probability p,
+and takes on the value 1 with the probability 1 - p.
+So if p is 0.5 it's like flipping a fair coin,
+r=0 with probability p or probability of heads,
+r=1 with the same probability as tails.
+Let's see how we implement the dropout method.
+In the l th layer of the neural network, we multiply. The activation function of each element in the layer
+with a Bernoulli distributed random variable r. R take on the value 0 with probability p
+and r takes on the value 1 with probability 1-p.
+In this case if r subscript 1 equals 0,
+we are shutting off the first neuron in the layer or the first element in the vector.
+We have our neural network, we apply dropout to the hidden layers during the forward step while training.
+We also have a probability p, and this tells us how likely we are to shut off a neuron,
+each neuron is independent of each other and each iteration.
+So if one neuron is shut off, it does not affect the probability
+that the other neurons being shut off in the same layer or another neuron being shut off in another layer.
+In the Forward step for the first iteration we shut off some neurons in each layer
+each with a probably of 0.2. This is done by multiplying the activation function by zero.
+For the second training iteration, we randomly turn several neurons off.
+As you can see, it is a different set of neurons being turned off in this iteration,
+than the set of neurons being turned off in the previous iteration. Then we calculate the forward step.
+The process is repeated for each iteration of training.
+PyTorch normalizes the values in the training phase of each activation by dividing with the value 1 minus p.
+This is due to the expected value of each neuron being turned on is 1 minus p.
+The larger p the more neurons we remove, thus preventing overfitting.
+If p =0.8 we expect that the majority of neurons to not be active.
+If p equals one, then all the neurons will be multiplied by zero
+Generally the more neurons the larger value of p should be used.
+For the layers with less neurons we use values for p between 0.1 and 0.05.
+For the layers with more neurons we use a value for p of 0.5.
+Let's see the evaluation phase.
+For the evaluation we do not multiply the activation function with the Bernoulli random variable r.
+We simply run the neural network with all the neurons being active.
+We see the model with no dropout has regions that overlap the decision boundary.
+The validation accuracy is 77 percent,
+we see that the decision function generated by the neural network using a drop out of 0.5
+is much less likely to over lap and have an improved validation accuracy of 87 percent.
+The parameter p is a hyper parameter we can obtain the optimal value of p through cross validation.
+If the value of p is to small in this case 0.01, we risk overfitting.
+If the value of p is to large we risk underfitting.
+The following graph is the cost of the neural network models using the training data and validation data,
+one model implements dropout and the other does not implement dropout.
+The line graph in blue does not implement drop out, we see the cost continuously decreases and is the lowest.
+This suggest that model is catering to the noise of the data.
+Conversely wee see that as the training cost decreases, the validation cost increases.
+We see that the model in green uses drop out the training cost is larger than the model without dropout,
+but the validation cost is smaller. Let's see how to implement Dropout in PyTorch.
+Here we create our neural network model implementing the dropout method.
+We set a parameter p in the constructer, that represents the probability.
+We create a dropout object, the parameter p is the probability of turning off a neuron.
+We apply the dropout method to the first hidden layer. We then apply the dropout method to the second hidden layer.
+Here we implement the dropout method for nn dot sequential.
+This is the class which we use to obtain the data set to generate the polynomial decision boundary.
+We create a neural network model that implements dropout with a p value of 0.5.
+The dot train method tells the model that we are in the training phase,
+which will implement the dropout method, later we use the dot eval method to tell the model it is in the evaluation phase
+and that will turn off the dropout method. In this lab we will use the ADAM optimizer,
+this optimizer gives more consistent performance. You can try with SGD.
+We use our cost or criterion function.
+We create our dataset, our validation data set, we store some metrics in a Loss dictionary.
+We train the model, we use batch gradient descent as we can store all the data in memory.
+We set the model to evaluate to make a prediction on the validation data,
+we set it back to train when we continue training. Just to reiterate,
+when the model is in evaluation mode to make a prediction, we would not implement the dropout method.
+The dot eval method will turn off the dropout method. And that’s it.
+Music
+
+Neural Network initialization Weights
+Music
+In this video, we will discuss the initialization of the weights in a Neural Network.
+In this video we will discuss: the problem of not initializing the Weights in a Neural Network model correctly.
+How to Fix the Problem, Different Initializing methods in PyTorch.
+Let's see what happens when the weights in the same layer have the same values.
+Many times when a neural network is not functioning, it has to do with the fact that the weights were not initialized correctly during the training phase of the neural network.
+Most of the time PyTorch has done the initialization process for us under the hood.
+Using our simple network, lets see what happens if we do not select good weights to start off with.
+PyTorch randomly initializes the weights using a method we will discuss later. To understand why this is important
+let's see what happens when we initialize all of the weights with the same value of one and bias to zero.
+We will change the model parameters as follows.
+We will use the simple classification problem.
+After we train our model, we see that our model does a horrible job of predicting the decision function.
+Examining the model parameters we see that the weight in the same layer has the same value.
+For example the linear weights for the first layer for each neuron are the same. Similarly for the second layer.
+This is because each neuron will have the same output and such have the same gradian update.
+As a result it is recommended that we randomly initialize our parameters.
+We initialize our parameters by sampling from the uniform distribution,
+this distribution has a constant probability in a specified range in this case from -1 to 1.
+That means any value between -1 to 1 can be sampled with equal probability.
+A value of -1 may be randomly selected, with equal probability value of 0 may be randomly selected.
+Also we could select a value of 1, the main problem is how to select the range of the uniform distribution.
+Our second uniform distribution, has a narrow range between -0.05 to 0.05.
+The problem is that the values that we sample is squashed between -0.05 and 0.05
+which is too close together and defeats the idea of randomly sampling the values of the weights.
+But there is also a problem with making the range of our distribution, too wide.
+If we draw samples near the tails of the distribution,
+the values will be large, this can lead to problems.
+If you recall if the input to the activation is to large our gradient will vanish,
+Let's review this by examining the gradient of our squared loss using the tach function.
+If the gradient with respect to k-th parameter ie k=1 or 2 looks something like this.
+We can plot out the gradient of the activation function.
+As you recall for the tanh function, at large values of z or small values of z,
+the derivative is close to 0. Since the gradient is a product of the derivatives of the activation function,
+if the derivative of the activation function is close to 0, it will cause the gradient to be close to zero
+To see what happens if we sample our weights from a distribution, let's look at the worst case.
+Let's say if we sample two large values and they are the same sign.
+We sample 1 for w1 and 1 for w2.
+Let us assume all the activations from the previous layer is 0.5.
+Let's look at the input to a one neuron, with two inputs, we'll initialize the bias b to zero for this example.
+The expression for the z is given by, the input of each neuron is 0.5, the weight is 1.
+the value of z equals one. We can plot the derivative of the activation function.
+Value of the derivative of the activation function at 1 is about 0.7.
+Let's see what happens if we had more neurons in the previous layer.
+Let's see if we use 4 neurons, plugging in a value for the activation of 0.5 and the parameter value of 1
+we see the value for z is 2. This is almost twice as large and the value of the derivative is much smaller.
+If we have 100 inputs, the value for z will be the sum of 100 terms.
+As a result of the value of z is a large number,
+as a result the value of the derivative of the activation function is almost zero.
+We can’t even fit it on the graph, this can cause the problem of vanishing gradients.
+So we have to adjust the width of the distribution according to the number of inputs.
+Now lets see How to Fix the problem of the vanishing gradient due to a large number of neurons.
+The idea for the solution is we scale the width of the distribution by the inverse of the number of neurons.
+So if we have 2 neurons we scale the width of the distribution by one-half.
+So the maximum value we can obtain is 0.5.
+Of course we can obtain samples anywhere in the interval from – ½ to 1/2.
+If we have 4 neurons as an input we we scale the distribution by one fourth.
+The maximum value we can obtain is ¼ of course we will not always get this value.
+Similarly, for 6 neurons we scale by 1/6.
+Let's go over the Different Initialization Methods in PyTorch.
+Initializing using the Default Method.
+In PyTorch by default if we use linear to create a linear object with “ L in” neurons,
+we simply make the lower bound of the range of the distribution the negative of the inverse of square root of L in.
+the upper bound of the range of the distribution is the positive of the inverse of square root of L in.
+See the following paper for a more detailed explanation.
+Initializing using the Xavier Method.
+Xavier Initialization is another popular method and is used in conjunction with the tanh activation.
+It takes into consideration the number of input neurons “Lin”
+as well as the number of neuron in the next layer “L out”.
+The range of the distribution is given by the following, for more info check out the following paper
+Once we create the object, we can initialize the weights by applying the function xavier_uniform_ ,
+this will change the state of the objects linear weights.
+In the lab we compare weights that are initialized from a simple uniform distribution,
+the PyTorch default and the Xavier’s method.
+Using the accuracy in the validation data,
+we see the Xavier method results improve much faster.
+Initializing using the He Method.
+For relu we use the He initialize method, after we create a linear object,
+We use the following method to initialize the weights, for more info check out the following paper.
+In the lab we compare weights that are initialized from a simple uniform distribution,
+the PyTorch default and He’s method. Using the accuracy in the validation data,
+we see the He’s method is much better.
+
+Gradient Descent with Momentum
+In this video we'll discuss Gradient Descent with Momentum. In particular, we'll talk about
+how we can use momentum to solve the problem with the parameter we are optimizing being
+stuck on saddle points, being stuck in the local minima. Let's talk about momentum.
+When learning momentum it is also helpful to learn about the concept of position velocity
+and acceleration. Here x denotes the position of our red ball. The initial position of this red ball
+is given by x superscript zero is zero. The ball is accelerating. We have an acceleration denoted by a
+and time denoted by t. We can get the new position by using the displacement acceleration equation
+plugging in the value of our new time and we get the position of six. This new position is given
+by x superscript one. Tracking the position of the red ball is similar to performing gradient descent.
+We have the acceleration term in yellow and the displacement term in red. We have the kth iteration
+of our parameter. This is the kth position of the ball. If we have our acceleration term,
+this is like our gradient. The next iteration of our parameter is the position of the k
+plus 1 iteration everything we are doing for the displacement acceleration equation we can apply
+to the gradient descent algorithm. Velocity is the rate of change in position with respect to time.
+Let's look at the case where the velocity is constant. We have a velocity of three and a time
+interval of two. We can calculate the new position of the ball with the equation of the old position
+and incrementing it with the product of velocity and time. We get the new position. This is similar
+to the update rule for gradient descent and momentum. Let's review the equation for velocity
+with constant acceleration. The velocity of k plus one is the velocity at k, plus the acceleration multiplied
+by the change in time. The velocity term here is used to update the weight when we perform gradient
+descent using momentum. We use the momentum here to calculate the velocity which we will use to
+update the weight. The velocity at the k plus oneth iteration is a sum, the derivative of our cost
+or loss function with respect to our weight and the sum of the velocity of the previous iteration
+multiplied by the momentum. The momentum term represented as the Greek letter rho
+is a positive number, usually less than one. We set our initial velocity to be zero the way
+for the k plus oneth iteration is updated with the previous weight, minus the learning rate multiplied
+by the current velocity. This is our learning rate ,as represented by the Greek letter eta.
+Here we show that updating our weight with momentum is similar to updating the position
+of our ball in the presence of acceleration. The derivative of our loss function with respect to
+our parameter is analogous to changing in velocity taking acceleration into account. Then we have our
+parameter weight. This is analogous to changing the position of our ball given the time and
+current velocity of the ball. We start off with our initial parameter value; we add some velocity.
+The new position of our ball is similar to the new value of our weight. We can think of momentum
+like momentum in physics. The parameter row is like the mass of the ball. The derivative of the cost or
+loss is like the force. When we have an object with a small mass, which is equivalent to a small row,
+the product of momentum and the previous velocity is small, adding the derivative of the cost or loss
+is like adding a force in the opposite direction of the ball. If these two values are equal,
+the sum of these values is zero. If we have a relatively large object it'll take a relatively
+large amount of force to stop it. A small value for the gradient will not stop the ball.
+Now let's see how momentum can help us solve problems with optimizing neural networks.
+Let's review: Saddle points. Saddle points are basically a flat point in the surface
+and for these videos we're going to mainly focus on one-dimensional saddle points. These problems
+get exceedingly worse in higher dimensions but unfortunately we can't really visualize them.
+Let's use an animation of a ball to represent gradient descent. The horizontal direction
+represents the value of the weight in which we are optimizing and the vertical direction means
+is value of the cost. We'd like to determine a value for the weight that minimizes the
+loss function which can be visualized as a ball rolling down to the bottom of the hill giving us
+a new value for the cost and weight. When using gradient descent we can calculate the gradient,
+this is similar to how gravity causes the ball to accelerate down the hill. We update the parameter
+value using our ball analogy. The ball will roll down the hill representing the change of parameter.
+Now let's assume we're at this point: The curve for our cost is flat
+as the curve is flat and our gradient is zero. When we perform gradient descent to update our weight
+nothing will happen. We will get stuck on the saddle point.
+Let's see how momentum helps us overcome this. Using momentum, we'll start at this
+point and we'll calculate our first iteration for the velocity. We calculate initial velocity.
+We will perform our parameter update. We call the velocity with the learning rate, we continue for
+the next iteration. We add the gradient of the cost function to the previous iteration of our velocity.
+We update the parameter value, the momentum helps us achieve a high velocity in the region where the
+graph is flat. At this point the gradient is zero. We update the velocity by adding the gradient, even
+though the gradient is zero, the current velocity is the product of the previous velocity scaled by
+the momentum. This allows us to achieve a non-zero velocity for the current iteration. This allows us
+to move the ball along the axis of the parameter w even when the graph for the loss is flat.
+We will continue this process until gradient descent allows us to reach the minimum value
+of the loss. If we pick a momentum term that's too small, we will get stuck in the saddle point. We can
+perform cross-validation to check a momentum term such that we won't get stuck in the saddle point.
+In the lab we run several iterations of stochastic gradient descent with momentum
+and plot the results. We see the parameter values do not get stuck in the saddle point
+with momentum. Local minima is another problem that gradient descent with momentum helps us overcome.
+We have a cost function. There are two points where the gradient might be zero.
+Using our ball analogy we have the global minimum: This is the point of the function where the cost
+is the smallest. We have the local minimum, which is the smallest point in a small neighborhood. This is
+where the ball stops rolling, we would like to use momentum not to get stuck in this local minimum.
+At the local minimum, our derivative will be negative. Using our ball analogy it will force
+the ball to roll in the direction of the local minimum but in this case the velocity term for
+the momentum is in the opposite direction. If the momentum term is too small, the ball will
+get caught in the local minimum and not reach the global minimum. A good value of the momentum term
+should allow us to reach the global minimum. If we select a momentum term that is large
+we may overshoot the global minimum. In the lab you can experiment with different momentum terms
+and see how you get caught in a local minima versus global minimum.
+There are other problems the momentum will help you solve, check out the labs. In PyTorch we
+just add the momentum value in the parameter of the constructor for the optimize object,
+in the lab we will use the spiral data set. Each color is a different class. In the lab
+we examine the total loss or cost we see that a momentum term of 0.5 performs best for our model.
+
+Batch Normalization
+In this video, we'll discuss batch normalization.
+In particular, we'll do
+an example of batch normalization,
+we'll discuss batch normalization in
+PyTorch and we'll go
+over some of the reasons why batch normalization works.
+So here's our standard picture of a neural network,
+and we're only going to look at the case,
+we'll try batch normalization on
+the activation before we
+pass it to the activation function.
+So let's take a look at the first layer.
+We have the outputs for each of
+the neurons and what we're going to do,
+is we're going to calculate
+the mean and standard deviation or
+variance for a particular mini-batch.
+We're going to normalize the output,
+then we're going to scale and shift them,
+and these are actually parameters,
+which we're going to learn via training.
+It'll take these outputs and
+pass them to the activation function.
+Let's do a little more concrete example.
+So we have our first mini-batch,
+which we'll denote by the matrix or Tensor X1,
+and then we'll have the output for the activations,
+which will start in the following tensor or matrix.
+So we'll have the output for the first neuron,
+second neuron and third neuron.
+The first sample will correspond to the first row
+of the matrix of Tensor Z and we'll use
+the same convention for each of the samples.
+We'll just use the index m to
+represent the actual sample.
+So what we're going to do,
+is calculate the mean and standard deviation
+for all the samples for each neuron,
+and then we'll normalize the output for each neuron.
+So each [inaudible].
+So we calculate the mean for
+the output for the first neuron,
+by simply calculating the average of
+all the samples and repeat
+the process for the standard deviation.
+We'll repeat the process for
+all the outputs of the second neuron,
+and for the third neuron,
+and then we'll normalize the output.
+The output for the first neuron,
+we'll simply normalize by subtracting
+the mean and dividing it by the standard deviation.
+In this is one will add a small little value,
+in case the standard deviation
+is zero which is in this case.
+So normalize the values and we get the following values.
+We'll repeat the process for the second neuron,
+and all the ones stay as one and you can verify this by
+calculating yourself and all the zeros
+get converted to negative one.
+We'll repeat the process
+for all the outputs for the final neuron.
+Then we'll apply the Scaling ship parameters
+to each of the neurons and again
+these parameters are learned via training
+and this gives a model some flexibility.
+So in this example, we'll use the following values.
+We'll take the output of the first neuron and scale
+and shift all the values using this transfer,
+same for the second neuron, and the third neuron.
+Then will repeat the process for the second layer.
+We'll calculate a mean and standard deviation,
+we'll normalize the values,
+apply a second scale and shift parameter,
+and then we'll pass the activation functions.
+Repeat the process for the next batch.
+So we did for X1, so now we'll have the second batch,
+we'll denote by the matrix or Tensor X2.
+We'll calculate a new mean and
+standard deviation and normalize it accordingly,
+and repeat the whole process again,
+and we'll do for the second layer as well.
+So now let's see how to make a prediction.
+So for the training, we'll calculate
+the mean and standard deviation
+for each batch as follows.
+For prediction, we use the population
+mean and population standard deviation.
+There's several ways to do this
+but this is the most simple ways.
+You can see the [inaudible] documentation,
+for other ways to calculate it,
+how the prediction actually
+works. Procedure is pretty similar.
+We take our actual activation functions
+and we apply the same procedure,
+and as you can see, the mean and variance in this case,
+don't have the little batch term.
+We do for the second layer,
+pretty much the same process and of course
+these parameters we obtained [inaudible].
+So now let's discuss, how to do
+batch normalization in PyTorch.
+Custom module or class neural network
+and we'll create a batch norm object over here.
+Our input is simply the number
+of neurons in that particular layer.
+So in this case, it will be three,
+and for this layer, it will be four.
+So we simply apply the batch normalization function
+to the output in that layer,
+and I'll perform the normalization,
+take care of all the training.
+Similarly for the second layer,
+it'll do the exact same thing.
+So to train the model is pretty similar,
+it might dropout, we'll have to set the model to train.
+So here are the results and just know
+you've to use model.evaluates to make a prediction.
+If you look at train loss, you can see it converges a lot
+faster and similar results for the test data as well.
+Let's discuss why batch normalization works.
+We're going to only go over
+the methods we discussed in this course.
+So here we have an equation,
+and we have Z1 and Z2.
+In this example, the results are
+constrained from one and in this results,
+variable z are constrained from 0.1-10.
+So if you look at the possible values for this equation,
+you can see that our parameters
+take on relatively equal values.
+If you look at this equation,
+we can see the parameters have
+all different values they can take.
+So this expresses itself
+in the contours of loss function.
+We use batch normalization.
+In this case, we
+can see the contours are relatively round,
+so we perform gradient descent.
+The steps are in
+the relatively same direction and it converges.
+In this case, we would then use batch normalization,
+and we'll perform gradient descent.
+The gradients are pointing in different directions.
+So it will take us longer to converge them there.
+So we also have the vanishing gradient problem,
+and let's say we have this sigmoid function,
+and we have these inputs, material derivatives.
+As you can see, these values
+basically when derive is very similar.
+If you normalize the data,
+you can see these values and
+a range with a gradient doesn't disappear.
+Through the actual original paper,
+of batch normalization,
+it discusses reducing internal covariant shifts.
+I wouldn't discuss it because its pretty
+involved but that's another reason
+why batch normalization works.
+They also said you don't need dropout
+in the paper but you can verify that yourself.
+It allows you to increase the learning rate,
+and finally the bias isn't really
+necessary and you can go
+over the math yourself to verify that.
+So that's it for batch normalization. That's it.
+
+Module 5 Convolutional Neural Networks
+Convolution
+Music
+In this video, we're going to discuss convolution.
+In this video, we'll talk about what convolution is, how to determine the size of the activation map,
+which is the output of the activation layer, stride parameter, zero padding.
+So, let's just ask the question, "What is convolution?".
+Let's say we have two images and, if you look closely, these two images are identical except one is slightly shifted.
+Let's see what happens when we convert the first image to a vector. Here's the image as a 12 dimensional vector,
+and the grid locations represent the areas, the black values represent where the intensity values are high.
+Now let's see what happens when we convert the second image to a vector. As you can see the intensity values are in a totally different location.
+Again we have the original image, the second image is slightly shifted. If we convert it to a vector the intensity values are in two totally different locations.
+Convolutional Networks help this problem by looking at relative positions of the pixels rather than absolute positions.
+Using the image and something called the kernel, we're going to perform convolution. The result is called an activation map.
+As you recall, we have a linear equation, with an output Z. Convolution is analogous to this linear equation
+the output will be another matrix or tensor. We have the parameter W this is known as a kernel. We have the parameter b this will be known as a bias,
+The star operation is known as the convolution operation. Let’s go over an example of a convolution.
+In PyTorch we can create a convolution object as follows,
+for now we're just going to stick to the case where we have one input channel and one output channel, the kernel size will be 3.
+We'll create an image that is 5 by 5 pixels in size. This will represent the number of images in our tensor.
+This will represent the number of channels. as it’s a gray-scale image, it will be set to one. We then apply the convolution kernel.
+Here's our image it is 5 by 5 in size. Here's our kernel it is 3 by 3 in size.
+PyTorch randomly initializes the kernel parameters, like the linear parameters.
+In the lab we initialize it with special values.
+Let's go over the operation of convolution, its similar to dot product, but the output will be the activation map or rectangle tensor.
+We start off in the top right corner of the image, and we'll overlay the kernel with that region of the image.
+We see the kernel values in red, we will multiply every element of the image by the corresponding element of the kernel.
+For the first row we'll get the following operation, multiplying the intensity value and summing the results.
+This process is repeated for the second row, multiplying the intensity value and summing the results.
+Finally, for the final row we multiply the intensity value and sumthe results.
+We sum those elements together, the result is the first element of z.
+We shift the kernel to the right represented by the different colors in red. We multiply all the elements of the kernel with the image.
+This gives us the second element of the activation map.
+We'll shift the kernel one more column and perform the exact same operation, multiplying every element of the kernel
+by the corresponding intensity value of the image, adding them all together. This gives us the next value of the activation map.
+We shift the kernel down one row and repeat the process. This corresponds to the second row in the activation map.
+We shift the kernel and repeat, getting the next element of the map.
+We continue until we reach the final column of the image. We then shift down one row getting the following value for the activation map.
+Preceding to the next column of the image, we repeat the process.
+We continue until we get to the last element of the image, we now have the output of the activation map.
+When we add the bias term to the convolution, we’re simply broadcasting it to every element in the tensor or matrix.
+Let's see how to determine the size of our activation map.
+Let's start off with a 4 x 4 image and we'll use the variable M to denote the size of the image.
+We have a 2 x 2 kernel and we'll use K to denote the size of the kernel, we'll set k equals 2.
+For the first iteration we're going to have one element in our activation map. We'll have to see how many units we have on the right to shift.
+There are M elements in the image so we can move M more times.
+But the kernel is of size K and the kernel cant go outside the image.
+As a result we will have M minus K pixels or steps,
+this means there's two more steps. If we include the first step,
+we have N-K+1 steps. In this case 3 and the same argument can be made for the vertical jumps.
+Let's verify pictorially.
+In the next iteration we shift the kernel 1 step to the right and populate the cell on the right of the activation map.
+In the next iteration we shift the kernel 1 step to the right and populate the cell on the right of the activation map.
+Since on the previous iteration our kernel has reached the rightmost step,
+we shift the our kernel one row down and to its leftmost position.
+Similarly we shift one row down and populate the leftmost cell on the activation map.
+In the next iteration we shift the kernel 1 step to the right and populate the cell on the right of the activation map.
+In the next iteration we shift the kernel 1 step to the right and populate the cell on the right of the activation map.
+Since on the previous iteration our kernel has reached the rightmost step, we shift the our kernel one row down and to its leftmost position.
+Similarly we shift one row down and populate the leftmost cell on the activation map.
+In the next iteration we shift the kernel 1 step to the right and populate the cell on the right of on the activation map
+In the next iteration we shift the kernel 1 step to the right and populate the cell on the right of the activation map.
+Now we populated the whole activation map. We see our activation map has a size of 3 by 3.
+Another important parameter in convolution is stride.
+The stride is basically the amount the kernel moves. If we have a stride of one,
+the kernel just moves once per iteration.
+When we create our convolution object in the constructor, we add the variable stride.
+Let's determine the size when we set the stride equal to 2.
+To determine the size of the output with a stride value of 2 or in general,
+for the first stride we have 1. We have M minus K samples left, because our stride numbers larger
+will have less jumps, we can get the actual number by dividing the remaining number of pixels by the actual stride size.
+Adding the activation value for the first stride the formula is given by.
+In this case the size of our activation map will be 2.
+In the next iteration we shift the kernel 2 steps to the right and populate the cell on the right of the activation map.
+Since on the previous iteration our kernel has reached the rightmost step, we shift the our kernel 2 rows down and to its leftmost position.
+Similarly we shift one row down and populate the leftmost cell on the activation map.
+In the next iteration we shift the kernel 2 steps to the right and populate the cell on the right of the activation map
+Let's see what happens when we use a stride of 3. We have a stride of three, we plug the value into the equation we get a nonsensical value that doesn't really make sense.
+To solve this, we will use 0 padding. Let's review zero padding.
+When we create a convolution object and we add in the parameter padding, we set it equal to 1.
+We take our original image. This will add two additional rows of zeros and two additional columns of zeros.
+The new image shape is given by M prime, is simply the old image plus
+two times the size of the padding elements added. In this case the value is 6.
+Let's see if we can now perform a Convolution.
+We overlay the kernel on the top left cornel of the image and obtain a value of 1.
+In the next iteration we shift the kernel 3 steps to the right and populate the cell on the right of the activation map.
+Since on the previous iteration if we shift our kernel 3 more steps to the right
+we will reach out of bounds, we shift the our kernel 3 rows down and to its leftmost position.
+Similarly we shift one row down and populate the leftmost cell on the activation map.
+In the next iteration, we shift the kernel 3 steps to the right and populate the cell on the right on the activation map.
+We see how we can now perform the convolution.
+So to summarize in convolution we have an image, we have the kernel
+we use this to obtain the activation map,
+see the labs for how to deal with color images using Conv2d.
+Music
+
+Activation Functions and Max Polling
+In this video we're going to discuss activation functions and max pooling.
+First we will talk about the activation functions, then we'll discuss max pooling.
+Let's talk about activation functions.
+Using the Activation Map we apply the activation function to each element in the activation map.
+We get an output tensor that is the same size and shape.
+We have the input image tensor X and perform convolution and get the output tensor Z, we’ll then apply the activation function.
+Let's do an example.
+We will have our input image
+we will have our kernel.
+We take our input image, we perform convolution, we have our activation map
+we apply the activation function. Let's look at the output.
+We have negative 4, we'll apply the relu function, we get zero.
+This applies to the other elements in the column, we'll apply the relu function, we get all zeros.
+For the second column we have all zero values, we'll apply the relu function, we get all zeros.
+For the final column we have all 4's, we'll apply the relu function, we get all 4s as the output.
+When the activation function is applied to multiple channels, we simply apply the activation function to each element.
+We can see in this example all the negative values are set to zero and the other values remain the same.
+In PyTorch to apply the activation function, we have an image, we perform convolution,
+we then apply the activation function.
+If you would like to use the sequential method we would create a relu object and apply it. Now lets apply Max pooling,
+we will review one of several variants. Max pooling will reduce the size of the activation maps reducing the number of parameters,
+it will also reduce the impact of small changes in the image.
+Remember our last diagram, we usually apply Max pooling to the activation map.
+We have an image, we have a region of pixels of shape K by K.
+We simply choose the maximum value in the proscribed regions, we have the following region.
+we simply select the pixels with the largest value.
+We shift the region and repeat, just like convolution we repeat the process.
+We stop when we get to the end of the image. In addition, we can create a max pooling object and apply it to the image,
+with the region size and stride, the result is a new tensor, the shape can be determined just like convolution.
+We can also apply max pooling directly to the image as a function.
+If we set the stride equal to none, the default parameter
+we shift the entire area per stride, we get the following outputs.
+We continue moving.
+We can represent the pooling as follows.
+Max pooling helps by making small changes in the images have less impact.
+We have two images they are identical but one slightly shifted, we apply max pooling.
+We start shifting.
+We see the output is identical now. And that's it!
+
+Multiple Input and Output Channels
+In this video, we're going to discuss convolution with multiple channels.
+We'll talk about multiple output channels, multiple input channels,
+and multiple input and output channels.
+First, we'll discuss multiple output channels.
+As you recall in the first case, we had the image or tensor X, we performed convolution with a kernel, and then we get an activation map.
+For multiple output channels, we have multiple kernels. Each kernel will produce a different activation map.
+We create a convolution object, we specify the number of output channels in this case three.
+We will create an image, these two parameters here will be the number of images,
+or mini batch size, and the second element will be the number of channels, in this case 1.
+We perform the convolution, just to note, because PyTorch randomly initializes our tensors,
+we're going to set some nice values up using convolution kernels people have already come up with before.
+We have an input image X, we then perform three convolutions,
+each have three outputs, denoted by Z0, Z1, and Z2.
+Let's convert the tensor into an image of a vertical line and look at the outputs.
+We perform the convolution and for each channel we have an output. If you look at these two activation maps they are basically a constant value.
+If you look at the result of this activation map it has a different output, this kernel can actually detect the edge.
+In general we can see that certain kernels can be used to detect certain features in an image. Let's see what happens when we apply a different image.
+We will create a second image, we will perform the convolution using the same kernels.
+We have the image it’s a horizontal line. Let's take a look at the output channels.
+The output of this channel detected the horizontal line. Essentially this kernel is actually a horizontal line detector.
+For the other two kernels nothing happened. To reiterate, different kernels detect different features in the image.
+In general, if we have three output channels when we perform convolution,
+every channel will have its own independent kernel and bias term as well and output three activation maps.
+The kernel channel is the first element in the shape attribute for each output.
+For the output the first axis corresponds to the sample and the second axis corresponds to each activation map.
+Now, let's discuss multiple input channels.
+You might have multiple input channels in an RGB image, where each channel represents a different intensity of red, green, and blue.
+Usually We'll have multiple channels in a convolutional neural network. This should not be confused with 3D convolution
+as each convolution is still 2D.
+For multiple input channel convolution, we’ll have one output, and for every input channel
+we'll have our own kernel k, we’ll perform convolution with that kernel
+with the corresponding input channel, we'll add the results together, and we'll get an output.
+A matrix analogy is helpful, where our parameters are like a row vector and our input images are like a column vector,
+we perform the dot product operation, but instead of performing multiplication we’ll perform convolution.
+We preform convolution with the first kernel and image,
+then the second kernel and channel we add the results and get the output.
+Let's do an example with two input channels, we will use the following values for the kernel the bias will be zero.
+Here’s the image it will have two channels, for channel 1 here is the image or tensor,
+also for channel 2.
+We will perform convolution on the first channel, then we'll perform convolution with the second channel.
+we will then add the results for each convolution together.
+Now we'll discuss multiple-input and output channels.
+Let's create a convolution object with 2 input channels,
+we represent each channel with a block with 3 output channels.
+Each output channel will have two sets of kernels, for each input channel.
+For the first output we have these two kernels, and we take our two inputs and we perform convolution with those two kernels,
+we add the results together we then have the final output.
+For the second output channel we do the exact same thing, we take the two inputs with each of the corresponding kernels,
+we perform convolution, add up the results, we get the second output channel.
+For the final output, we have two kernels each for the two inputs,
+we perform the convolution and add the results together, we then get the final output.
+Its helpful to think of the process like matrix multiplication. The kernels are elements in the matrix,
+the number of inputs are the number of columns and the number of outputs are the number of rows.
+We have two inputs represented by a two element column vector.
+We perform the multiplication and we get three outputs.
+Here's the formula for the multi-channel convolution, where L is the output channel and K is the input index.
+Let's look at an actual example, let's see how the actual different kernels look like.
+Just a note, PyTorch randomly initializes the kernels, but in the lab we specify custom values for you to use.
+We have the kernels for the first input channel, the kernels for the second input channel,
+and the kernels for the third input channel.
+We'll create an input image, the first channel will be the following image,
+the second channel will be the following image. Let's see the output for the different channels.
+Here's our equation again and we'll just write down the expression for the first channel,
+we’ll set the bias term equal to zero. For the 1st output,
+for the first channel we convolve it with the first kernel, we do the same with the second kernel and second input.
+We add the results of each operation, we get an activation map.
+For the second output channel we repeat the process convolving the two channels. (
+We add the activation map, getting the second output.
+We do the same for the final channel. And that's it!
+
+Convolutional Neural Network
+In this video, we're going to discuss convolutional neural networks. CNN for short.
+We will discuss, The Convolutional Neural Network Constructor, The Forward Step, Training in PyTorch.
+This is the standard picture you might see for a convolutional neural network.
+It looks similar to a regular network, in this example we have one hidden layer, we have one output layer
+we have the convolution kernels. Like the hidden and output layer parameter these they’re obtained via training
+we have the Activation Map where we can apply the activation functions.
+Then we have the pooling layer applied to each channel, this diagram can get a little complicated so let's build an extremely simple cnn.
+Let's start off with a really simple example. We are going to try to distinguish between a horizontal line and a vertical line.
+In the vertical line, Y will equal 0, and in the horizontal line, y will equal 1.
+To make things interesting, we're going to add some noise. The next sample for y = 0 might look like this,
+also the next sample for y=1 may look like this.
+Let's build a simple CNN, with two convolution layers and an output layer.
+We have the image X, lets remove it to make everything more clear.
+Our first convolutional layer we will have two channels. We are going to apply the convolution operation
+we then get our activation map for each kernel, we then apply the activation function.
+We will then apply pooling, we now have two outputs. For our second layer we'll have two inputs and one output,
+this will correspond to two kernels. We'll convolve the outputs of the preceding layer with its own kernel,
+and add the results together, the result is one activation map.
+After the final step, we apply an activation function and max-pooling to produce an output.
+this is the output of our second convolutional layer.
+We simply flatten or reshape this output of the max pooling layer, for example if the output of the max pooling layer is 7 units of width
+and 7 units of height, we flatten or reshape the tensor to a 1D tensor with 49 components.
+Sometimes calculating the shape of this output is the hardest part.
+This is then used as in input to a fully connected neural network. In this lab we will use one output layer.
+In summery, we have two convolution kernels these are parameters that we get via training.
+The activation map where we apply the activation function and max pooling,
+a second set of kernels as before these are parameters that we get via training,
+the second activation map where we apply the activation function and max pooling, we flatten this output
+and use this as an input to a neural network. This can get confusing so lets look at an other view to get a better understanding.
+We have the two channels corresponding to our first convolution layer, the second two channels corresponding to our second convolution layer,
+We will apply the activation function and max pooling to the first activation map. We take the two outputs from our first layer,
+convolve them together and add the results. We will apply the activation function and pooling to the activation map
+then we flatten this output, this is used as an input to the fully connected layers to make a classification.
+As it gets difficult to calculate the shape of the network we will only include two parameters,
+the number of output channels for our first convolution layer, the number of output channels for our second convolution layer.
+Let's review the Convolutional Neural Network Constructor.
+Let's review the object constructor for the cnn . We produce a 2d convolution object cnn1.
+As we are going to use gray scale images we will only have one input channel.
+The number of output channels in this case two, we also include the kernel size and padding size.
+We add a max pooling object with kernel size and stride size, we will include the activation function in the forward step.
+We then add the second convolution layer, the number of inputs for the second layer is equal to the number of outputs for the first layer,
+and the number of outputs for the second layer will be 1, we will also include the stride, size and padding size.
+We will add a second max pooling layer. We will add
+an output
+linear layer, we can determine the shape of the output channel using
+the formulas we used in the previous section. For this, it will be 7 by 7
+as a result when we flatten the output it will have 49 elements.
+As a result our final layer will include two neurons one for each class, each neuron will have an input dimension of 49.
+Lets review theForward method
+This is the Forward Method.
+In the forward step, we apply the convolution.
+We then apply the activation function and max pooling for the first layer and assign it to x.
+We take the output x, we the apply the second convolution layer
+we then apply the activation function and max pooling, we now have
+an output.
+We reshape the output using the method view, this converts our rectangle input to a 1d input.
+We then apply the linear layer.
+Training in PyTorch, we can use back propagation to update the parameters including the
+two convolution layers and the hidden layers.
+Training is identical we create our data set object and our cnn model.
+The criterion function, our optimizer, some parameter's for training, our train loader and validation loader.
+We then train the model, see the lab for more details.
+We can see as the cost decreases the accuracy goes up, check the lab for more details.
+
+Convolutional Neural Network for MNIST
+In this video we see how to build a CNN for MNIST, to make things faster in the lab we will use an image size of 16 by 16.
+This is an image we will use to understand the shape of our CNN; it is similar to our previous example
+except we will have 16 output channels for our first convolution layer. For our second convolution layer, we will have 16
+inputs
+and 32 outputs.
+The input
+to the final layer will be a different shape. As there are ten layers for MNIST, we will have ten output neurons. Let us review the constructor and forward method.
+We will use the same structure as our simple cnn, but we will have more channels in each layer.
+We produce a 2d convolution object cnn1, with a kernel size of 5, padding of 2 and 16 output channels.
+We will add a max pooling object ‘maxpool1; with a kernel size of 2 and using the default stride. We will apply the activation in the forward step.
+We then add the second convolution layer cnn2, with 16 input channels and 32 output channels,
+kernel size of 5, stride size one and padding of 2. We will add a second max pooling layer maxpool2
+we then add a final out put linear layer. Let's examine the shape of the output layer.
+The output if the max pooling will be 4 by 4, as a result we are going to have 4 by 4 inputs. We also have the output channels.
+We have 32 output channels each channel is 4x4 for a total of 16 elements.
+As there are 32 channels multiplied by 16 we have a total of 512 elements.
+We flatten or reshape the tensor to have 512 outputs as a result each neuron will have 512 input dimensions,
+as we have 10 classes we have 10 neurons.
+Let's see the forward step. We apply the first 2d convolution object cnn1
+followed by activation function and max pooling, we then apply the second convolution layer cnn2,
+followed by the second activation function and max pooling, we take the output channels.
+We flatten or reshape the output channels, we then apply the output layer.
+And that’s it! See the lab for the training process and other details.
+
+Torch Vision Models
+Torch-Vision Models are popular models that have been developed by experts, we can use these models to help better classify our own images.
+We will focus on how to use pre-trained models, these models have been trained by experts.
+We simply train the output layer of these models to classify our own data set.
+Let's see how to use pre-trained models, most of these models use color images.
+We will use the Resnet 18 a type of residual networks that uses skip connections,
+We will not concern ourselves with the model details but the model we have used has been expertly trained and the parameters will be optimized with lots of data.
+The model uses skip connections, although we will not cover this we will add an arrow to signify this.
+We are concerned with the last hidden layer as well as the output layer
+We can train the model to classify a set of images all we need is a training set.
+We will need the following libraries. You should load the resnet18 model, setting the parameter pretrained to True,
+this means the model has been trained before. We have to normalize the image channels, for resnet 28 we have the following values,
+We then apply compose to the following transforms: “Resize”, To “Tensor” and “Normalize”.
+We will apply each of the transforms. Different pretrained models will have different values.
+You should create a dataset object for your data that will have training and testing data.
+You will simply replace the output layer of the pretrained model with your own output layer. This will allow you to use the output of the pretrained model
+as input to your own output layer. As you will only change the output layer of the pretrained model,
+you will set the parameter requires grad equal to false. You will replace the output layer with your own fully connected layer,
+as the last hidden layer has 512 neurons you will have 512 inputs. For this example,
+we will have 7 classes as a result we will have 7 outputs one for each class.
+You will create a train loader and testing loader object, with the batch size 15 and 10 respectively
+You will create a cross entropy criterion function, you create an optimizer object,
+the optimizer will only use parameters where the grad attribute is set to true.
+You will create a list for the training loss and validation accuracy, you will also have to determine the number of epochs
+in this case 20 plus several other parameters.
+The training process is similar, the main difference is, we will set the model to train for training.
+We also set the model to evaluate to make a prediction. Try to pretrain your own model.
+
+Graphics Processing Unit
+In this video, we will look into how we can use
+graphics processing units or GPUs in PyTorch.
+We will cover CUDA,
+CPUs and tensors, setting the GPU, training, testing.
+GPUs allow us to run our model much faster. What is CUDA?
+CUDA is a parallel computing platform
+and programming model developed by
+NVIDIA that enables the use of
+NVIDIA GPUs for computational tasks,
+which in our case is training CNNs in PyTorch.
+In PyTorch, the torch.cuda package
+allows for the utilization of GPUs for computation.
+So importing torch will
+provide us with the necessary packages.
+Using the torch.cuda package,
+we'll first check if CUDA is available,
+basically, checking if you have a working compatible GPU.
+Next, we will define
+our GPU so we can send tensors to it.
+cuda:0 represents the first visible CUDA device.
+Now that our GPU is setup,
+we can discuss creating our CNN.
+Computation in PyTorch is performed on tensors,
+as all the data used to train
+your CNN will be stored in these.
+One benefit of using tensors is that they can run on
+GPU using the two method
+which performs a device conversion.
+The two method sends the tensor to the GPU and
+returns a tensor with a specify device, which is the GPU.
+Next, we will discuss how to set up
+our GPU so we can use it.
+When creating the CNN to be trained using a GPU,
+you do not need to alter the init or forward function.
+As you can see in the sample CNN above.
+The only change in this step is
+after the CNN object is created.
+We must use the device we set up earlier to
+send the model to the GPU using the two method.
+This will convert the layers you created in
+the CNN init function to CUDA tensors.
+With your CNN created,
+now we must learn how to train it.
+The training is the same as if you were not using a GPU,
+except you must send your data,
+which are the features and labels to the GPU.
+Testing is also similar,
+but you don't need to send the labels to the GPU,
+because we don't need to calculate
+loss and optimize the parameter of the model.
+In conclusion, you have learned how to use a GPU in
+PyTorch to speed up computational related tasks.
